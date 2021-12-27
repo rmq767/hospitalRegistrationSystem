@@ -30,10 +30,10 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         name: "About",
         component: () => import("@/views/About.vue"),
         meta: {
-          roles: ["admin"],
+          roles: ["admin", "common"],
           title: "关于我",
           icon: "",
-          isHide: false,
+          isHide: true,
         },
       },
       {
@@ -43,6 +43,17 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         meta: {
           roles: ["admin", "common"],
           title: "修改密码",
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/registration",
+        name: "Registration",
+        component: () => import("@/views/Registration/index.vue"),
+        meta: {
+          roles: ["common"],
+          title: "我要挂号",
           icon: "",
           isHide: false,
         },
