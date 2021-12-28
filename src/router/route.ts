@@ -58,6 +58,28 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           isHide: false,
         },
       },
+      {
+        path: "/doctor",
+        name: "Doctor",
+        component: () => import("@/views/Doctor/index.vue"),
+        meta: {
+          roles: ["common"],
+          title: "医生搜索",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/doctor/:id",
+        name: "DoctorInfo",
+        component: () => import("@/views/Doctor/components/DoctorInfo.vue"),
+        meta: {
+          roles: ["common"],
+          title: "医生详情",
+          icon: "",
+          isHide: true,
+        },
+      },
     ],
   },
 ];
