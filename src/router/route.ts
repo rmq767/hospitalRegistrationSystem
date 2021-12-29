@@ -48,6 +48,18 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/userRegistration/:id",
+        name: "UserRegistration",
+        component: () =>
+          import("@/views/Registration/components/UserRegistration.vue"),
+        meta: {
+          roles: ["common"],
+          title: "我的挂号",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
         path: "/registration",
         name: "Registration",
         component: () => import("@/views/Registration/index.vue"),
@@ -57,6 +69,20 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           icon: "",
           isHide: false,
         },
+        children: [
+          {
+            path: "/doctorRegistration/:id",
+            name: "DoctorRegistration",
+            component: () =>
+              import("@/views/Doctor/components/DoctorRegistrationForm.vue"),
+            meta: {
+              roles: ["common"],
+              title: "医生挂号",
+              icon: "",
+              isHide: true,
+            },
+          },
+        ],
       },
       {
         path: "/doctor",
@@ -76,18 +102,6 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         meta: {
           roles: ["common"],
           title: "医生详情",
-          icon: "",
-          isHide: true,
-        },
-      },
-      {
-        path: "/doctorRegistration/:id",
-        name: "DoctorRegistration",
-        component: () =>
-          import("@/views/Doctor/components/DoctorRegistrationForm.vue"),
-        meta: {
-          roles: ["common"],
-          title: "医生挂号",
           icon: "",
           isHide: true,
         },
