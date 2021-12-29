@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
-import { Doctor } from "../doctor";
+import { Doctor } from "@/utils/interface/doctor";
 export default defineComponent({
   name: "DoctorList",
   setup() {

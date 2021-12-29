@@ -1,10 +1,5 @@
 <template>
-  <el-form
-    class="login-content-form"
-    ref="form"
-    :model="ruleForm"
-    :rules="rules"
-  >
+  <el-form class="login-content-form" :model="ruleForm" :rules="rules">
     <el-form-item prop="userName">
       <el-input
         type="text"
@@ -99,7 +94,7 @@
 import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { userRegisterForm } from "./validateForm";
+import { userRegisterForm } from "./rules";
 import VerifyCode from "@/components/VerifyCode.vue";
 export default defineComponent({
   name: "LoginUserRegister",

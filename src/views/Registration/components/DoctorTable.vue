@@ -24,61 +24,26 @@
       <el-table-column prop="desc" label="专家简介" />
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button type="text" size="small" @click="appointment(scope.row)"
+          <el-button
+            type="text"
+            size="small"
+            @click="toRegistrationPage(scope.row)"
             >我要预约</el-button
           >
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog v-model="dialogFormVisible" title="网上挂号" center>
-      <el-form :model="userForm" :label-width="120">
-        <el-form-item label="专家名称：">
-          <p>{{ form.name }}</p>
-        </el-form-item>
-        <el-form-item label="出诊时间：">
-          <p v-for="(date, index) in form.date" :key="index">
-            {{ date }} --- 总号数：{{ form.allNumber[index] }} --- 剩余号数：{{
-              form.remainNumber[index]
-            }}
-          </p>
-        </el-form-item>
-        <el-form-item label="专家简介：">
-          <p>{{ form.desc }}</p>
-        </el-form-item>
-        <el-form-item label="真实姓名：">
-          <el-input v-model="userForm.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证号：">
-          <el-input v-model="userForm.id" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="预约时间：">
-          <el-select v-model="userForm.date" placeholder="Please select a zone">
-            <el-option label="Zone No.1" value="shanghai"></el-option>
-            <el-option label="Zone No.2" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false"
-            >确认</el-button
-          >
-        </span>
-      </template>
-    </el-dialog>
   </el-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
+import { useRouter } from "vue-router";
+import { Doctor } from "@/utils/interface/doctor";
 export default defineComponent({
   name: "DoctorTable",
   setup() {
     const state = reactive({
-      dialogFormVisible: false,
-      form: {},
-      userForm: {},
       tableData: [
         {
           name: "吕亚洲",
@@ -103,11 +68,11 @@ export default defineComponent({
         },
       ],
     });
-    const appointment = (row: object) => {
-      state.form = Object.assign({}, row);
-      state.dialogFormVisible = true;
+    const router = useRouter();
+    const toRegistrationPage = (row: Doctor) => {
+      router.push({ name: "DoctorRegistration", params: { id: row.name } });
     };
-    return { ...toRefs(state), appointment };
+    return { ...toRefs(state), toRegistrationPage };
   },
 });
 </script>

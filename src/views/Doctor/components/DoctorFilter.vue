@@ -1,7 +1,7 @@
 <template>
   <div class="filter">
     <el-card>
-      <el-form :inline="true" :model="state" class="demo-form-inline">
+      <el-form :inline="true" :model="state">
         <el-form-item label="医生名称：">
           <el-input
             v-model="state.doctorName"
@@ -58,10 +58,13 @@ export default defineComponent({
         "针灸推拿科",
       ],
     });
-    const changeDepartment = (value: string) => {
-      emit("change", value);
+    const onSubmit = () => {
+      emit("change", {
+        doctorName: state.doctorName,
+        department: state.department,
+      });
     };
-    return { state, changeDepartment };
+    return { state, onSubmit };
   },
 });
 </script>

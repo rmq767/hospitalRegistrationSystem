@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, onMounted, ref, nextTick } from "vue";
+import { defineComponent, watch, onMounted, ref } from "vue";
 export default defineComponent({
   name: "VerifyCode",
   props: {

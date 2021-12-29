@@ -7,7 +7,7 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "element-plus/dist/index.css";
 import "./styles/index.scss";
 import other from "@/utils/other";
-import components from "@/components";
+import components from "@/components"; //全局组件
 
 const app = createApp(App);
 
