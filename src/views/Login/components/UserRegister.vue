@@ -94,7 +94,7 @@
 import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { userRegisterForm } from "./rules";
+import { userRegisterForm } from "./formRules";
 import VerifyCode from "@/components/VerifyCode.vue";
 export default defineComponent({
   name: "LoginUserRegister",

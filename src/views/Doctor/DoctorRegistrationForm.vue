@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from "vue";
-import rules from "./rules";
+import formRules from "./formRules";
 export default defineComponent({
   name: "DoctorRegistrationForm",
   setup() {
@@ -70,7 +70,7 @@ export default defineComponent({
         id: "",
         date: "",
       },
-      formRules: rules,
+      formRules: formRules,
     });
     /**
      * @description 提交表单

@@ -48,10 +48,9 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/userRegistration/:id",
+        path: "/user/registration/:id",
         name: "UserRegistration",
-        component: () =>
-          import("@/views/Registration/components/UserRegistration.vue"),
+        component: () => import("@/views/User/Info/UserRegistration.vue"),
         meta: {
           roles: ["common"],
           title: "我的挂号",
@@ -60,33 +59,30 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/registration",
+        path: "/user/registration",
         name: "Registration",
-        component: () => import("@/views/Registration/index.vue"),
+        component: () => import("@/views/User/Registration/index.vue"),
         meta: {
           roles: ["common"],
           title: "我要挂号",
           icon: "",
           isHide: false,
         },
-        children: [
-          {
-            path: "/doctorRegistration/:id",
-            name: "DoctorRegistration",
-            component: () =>
-              import("@/views/Doctor/components/DoctorRegistrationForm.vue"),
-            meta: {
-              roles: ["common"],
-              title: "医生挂号",
-              icon: "",
-              isHide: true,
-            },
-          },
-        ],
       },
       {
-        path: "/doctor",
-        name: "Doctor",
+        path: "/user/information",
+        name: "UserInfo",
+        component: () => import("@/views/User/Info/UserInfo.vue"),
+        meta: {
+          roles: ["common"],
+          title: "用户信息",
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/doctor/search",
+        name: "DoctorSearch",
         component: () => import("@/views/Doctor/index.vue"),
         meta: {
           roles: ["common"],
@@ -96,7 +92,18 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/doctor/:id",
+        path: "/doctor/registration/:id",
+        name: "DoctorRegistration",
+        component: () => import("@/views/Doctor/DoctorRegistrationForm.vue"),
+        meta: {
+          roles: ["common"],
+          title: "挂号医生",
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/doctor/info/:id",
         name: "DoctorInfo",
         component: () => import("@/views/Doctor/components/DoctorInfo.vue"),
         meta: {

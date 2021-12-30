@@ -54,13 +54,13 @@ export default defineComponent({
      * @description 跳转个人信息
      */
     const toUserInfoPage = () => {
-      router.push("/about");
+      router.push({ name: "UserInfo" });
     };
     /**
      * @description 跳转个人信息
      */
     const toChangePwd = () => {
-      router.push("/changepassword");
+      router.push({ name: "ChangePassword" });
     };
     /**
      * @description 退出登录操作
