@@ -1,3 +1,4 @@
+import { reactive } from "vue";
 import { isIdCard } from "@/utils/validate";
 
 const validateId = (rule: any, value: string, cb: Function) => {
@@ -11,7 +12,7 @@ const validateId = (rule: any, value: string, cb: Function) => {
   }
 };
 
-export const userRegisterForm = {
+export const userRegisterForm = reactive({
   userName: [
     {
       required: true,
@@ -55,4 +56,4 @@ export const userRegisterForm = {
       trigger: "blur",
     },
   ],
-};
+});

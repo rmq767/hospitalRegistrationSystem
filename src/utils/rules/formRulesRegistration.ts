@@ -1,3 +1,4 @@
+import { reactive } from "vue";
 import { isIdCard } from "@/utils/validate";
 /**
  * @description 验证身份证
@@ -10,7 +11,7 @@ const validateId = (rule: any, value: string, callback: Function) => {
   }
 };
 
-const rules = {
+const rules = reactive({
   name: [{ required: true, message: "请输入真实姓名", trigger: "blur" }],
   id: [
     { required: true, message: "请输入身份证号码", trigger: "blur" },
@@ -19,6 +20,6 @@ const rules = {
   date: [
     { required: true, message: "请选择预约时间", trigger: ["change", "blur"] },
   ],
-};
+});
 
 export default rules;

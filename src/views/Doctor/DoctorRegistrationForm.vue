@@ -3,7 +3,7 @@
     <el-form
       :model="userForm"
       :label-width="120"
-      :rules="formRules"
+      :rules="formRule"
       ref="formEl"
     >
       <el-form-item label="专家名称：">
@@ -43,20 +43,21 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">确认</el-button>
-        <el-button @click="resetForm">重置</el-button>
+        <el-button type="primary" @click="onSubmit(formEl)">确认</el-button>
+        <el-button @click="resetForm(formEl)">重置</el-button>
       </el-form-item>
     </el-form>
   </el-card>
 </template>
 
 <script lang="ts">
+import { ElForm } from "element-plus";
 import { defineComponent, reactive, ref, toRefs } from "vue";
-import formRules from "./formRules";
+import formRules from "../../utils/rules/formRulesRegistration";
 export default defineComponent({
   name: "DoctorRegistrationForm",
   setup() {
-    const formEl = ref();
+    const formEl = ref<InstanceType<typeof ElForm>>();
     const state = reactive({
       doctorInfo: {
         name: "吕亚洲",
@@ -70,27 +71,24 @@ export default defineComponent({
         id: "",
         date: "",
       },
-      formRules: formRules,
     });
-    /**
-     * @description 提交表单
-     */
-    const onSubmit = () => {
-      formEl.value.validate((valid: boolean) => {
+    const formRule = formRules;
+    const onSubmit = (formEl: InstanceType<typeof ElForm> | undefined) => {
+      if (!formEl) return;
+      formEl.validate((valid) => {
         if (valid) {
-          console.log(state.userForm);
+          console.log("submit!");
         } else {
+          console.log("error submit!");
           return false;
         }
       });
     };
-    /**
-     * @description 清空表单
-     */
-    const resetForm = () => {
-      formEl.value.resetFields();
+    const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
     };
-    return { ...toRefs(state), onSubmit, resetForm, formEl };
+    return { ...toRefs(state), formRule, onSubmit, resetForm, formEl };
   },
 });
 </script>
