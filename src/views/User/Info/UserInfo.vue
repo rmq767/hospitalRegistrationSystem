@@ -27,17 +27,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="12">
-        <el-card class="registration-list">
-          <h3>预约列表</h3>
-          <UserRegistrationInfo
-            class="registration-info"
-            v-for="registration in registrationList"
-            :key="registration.id"
-            :info="registration"
-          ></UserRegistrationInfo>
-        </el-card>
-      </el-col>
+      <el-col :span="12"> </el-col>
     </el-row>
   </el-card>
 </template>
@@ -60,24 +50,6 @@ export default defineComponent({
         id: 123,
         phone: 456,
       },
-      registrationList: [
-        {
-          date: "2021-12-29 上午",
-          department: "儿科",
-          doctor: "李主任",
-          name: "小阮",
-          phone: "15281223440",
-          id: "1234",
-        },
-        {
-          date: "2021-12-29 上午",
-          department: "儿科",
-          doctor: "李主任",
-          name: "小阮",
-          phone: "15281223440",
-          id: "123",
-        },
-      ],
     });
 
     const onSubmit = () => {};
@@ -111,15 +83,5 @@ export default defineComponent({
   width: 178px;
   height: 178px;
   display: block;
-}
-.registration-list {
-  h3 {
-    margin-bottom: 20px;
-  }
-  .registration-info {
-    &:not(:last-child) {
-      margin-bottom: 20px;
-    }
-  }
 }
 </style>

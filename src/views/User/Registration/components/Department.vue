@@ -1,12 +1,9 @@
 <template>
   <div class="filter">
     <el-card>
-      <el-row :gutter="20">
-        <el-col :span="1" :offset="0">
-          <span class="name">科室：</span>
-        </el-col>
-        <el-col :span="23" :offset="0">
-          <el-radio-group v-model="department" @change="changeDepartment">
+      <el-form :model="form" label-width="100px" :inline="false">
+        <el-form-item label="预约科室：">
+          <el-radio-group v-model="form.department" @change="changeDepartment">
             <el-radio
               v-for="item in departmentOptions"
               :key="item"
@@ -14,8 +11,17 @@
               >{{ item }}</el-radio
             >
           </el-radio-group>
-        </el-col>
-      </el-row>
+        </el-form-item>
+        <el-form-item label="预约时间：">
+          <el-date-picker
+            v-model="form.date"
+            type="date"
+            placeholder="请选择预约时间"
+            :disabled-date="disabledDate"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -28,7 +34,10 @@ export default defineComponent({
   setup() {
     const { emit } = getCurrentInstance() as any;
     const state = reactive({
-      department: "",
+      form: {
+        department: "",
+        date: "",
+      },
       departmentOptions: [
         "儿科门诊",
         "儿童消化心血管科",
@@ -54,7 +63,10 @@ export default defineComponent({
     const changeDepartment = (value: string) => {
       emit("change", value);
     };
-    return { ...toRefs(state), changeDepartment };
+    const disabledDate = (time: Date) => {
+      return time.getTime() < Date.now();
+    };
+    return { ...toRefs(state), changeDepartment, disabledDate };
   },
 });
 </script>

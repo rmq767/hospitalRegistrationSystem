@@ -61,7 +61,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
       {
         path: "/user/registration",
         name: "Registration",
-        component: () => import("@/views/User/Registration/index.vue"),
+        component: () => import("@/views/User/Registration/Index.vue"),
         meta: {
           roles: ["common"],
           title: "我要挂号",
@@ -83,7 +83,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
       {
         path: "/doctor/search",
         name: "DoctorSearch",
-        component: () => import("@/views/Doctor/index.vue"),
+        component: () => import("@/views/Doctor/Index.vue"),
         meta: {
           roles: ["common"],
           title: "医生搜索",
@@ -113,6 +113,17 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           isHide: true,
         },
       },
+      {
+        path: "/evaluation/:id",
+        name: "Evaluation",
+        component: () => import("@/views/User/Evaluation/Index.vue"),
+        meta: {
+          roles: ["common"],
+          title: "用户评价",
+          icon: "",
+          isHide: false,
+        },
+      },
     ],
   },
 ];
@@ -124,7 +135,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
   {
     path: "/login",
     name: "login",
-    component: () => import("@/views/Login/index.vue"),
+    component: () => import("@/views/Login/Index.vue"),
     meta: {
       title: "登录",
     },
