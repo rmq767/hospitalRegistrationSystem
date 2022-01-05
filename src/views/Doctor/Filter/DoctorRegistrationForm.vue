@@ -53,7 +53,7 @@
 <script lang="ts">
 import { ElForm } from "element-plus";
 import { defineComponent, reactive, ref, toRefs } from "vue";
-import formRules from "../../utils/rules/formRulesRegistration";
+import formRules from "@/utils/rules/formRulesRegistration";
 export default defineComponent({
   name: "DoctorRegistrationForm",
   setup() {

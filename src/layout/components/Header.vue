@@ -54,7 +54,18 @@ export default defineComponent({
      * @description 跳转个人信息
      */
     const toUserInfoPage = () => {
-      router.push({ name: "UserInfo" });
+      const role = Session.get("userInfo").roles[0];
+      const id = "123";
+      let routerName = "";
+      switch (role) {
+        case "common":
+          routerName = "UserInfo";
+          break;
+        case "doctor":
+          routerName = "DoctorInfo";
+          break;
+      }
+      router.push({ name: routerName, params: { id } });
     };
     /**
      * @description 跳转个人信息

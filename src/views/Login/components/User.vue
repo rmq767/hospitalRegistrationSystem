@@ -93,7 +93,7 @@ export default defineComponent({
     });
     const onSignIn = async () => {
       let info = {
-        roles: ["common"],
+        roles: ["doctor"],
       };
       Session.set("token", "token");
       Session.set("userInfo", info);

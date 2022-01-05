@@ -20,7 +20,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Home.vue"),
         meta: {
           title: "首页",
-          roles: ["admin", "common"],
+          roles: ["admin", "common", "doctor"],
           icon: "",
           isHide: false,
         },
@@ -41,7 +41,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         name: "ChangePassword",
         component: () => import("@/views/ChangePassword.vue"),
         meta: {
-          roles: ["admin", "common"],
+          roles: ["admin", "common", "doctor"],
           title: "修改密码",
           icon: "",
           isHide: true,
@@ -70,7 +70,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/user/information",
+        path: "/user/information/:id",
         name: "UserInfo",
         component: () => import("@/views/User/Info/UserInfo.vue"),
         meta: {
@@ -83,7 +83,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
       {
         path: "/doctor/search",
         name: "DoctorSearch",
-        component: () => import("@/views/Doctor/Index.vue"),
+        component: () => import("@/views/Doctor/Filter/Index.vue"),
         meta: {
           roles: ["common"],
           title: "医生搜索",
@@ -94,7 +94,8 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
       {
         path: "/doctor/registration/:id",
         name: "DoctorRegistration",
-        component: () => import("@/views/Doctor/DoctorRegistrationForm.vue"),
+        component: () =>
+          import("@/views/Doctor/Filter/DoctorRegistrationForm.vue"),
         meta: {
           roles: ["common"],
           title: "挂号医生",
@@ -105,9 +106,9 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
       {
         path: "/doctor/info/:id",
         name: "DoctorInfo",
-        component: () => import("@/views/Doctor/components/DoctorInfo.vue"),
+        component: () => import("@/views/Doctor/Info/Index.vue"),
         meta: {
-          roles: ["common"],
+          roles: ["common", "doctor"],
           title: "医生详情",
           icon: "",
           isHide: true,
@@ -120,6 +121,28 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         meta: {
           roles: ["common"],
           title: "用户评价",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/doctor/worktime/info",
+        name: "WorkTimeInfo",
+        component: () => import("@/views/Doctor/WorkTime/WorkTimeInfo.vue"),
+        meta: {
+          roles: ["doctor"],
+          title: "每日详情",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/doctor/worktime",
+        name: "WorkTime",
+        component: () => import("@/views/Doctor/WorkTime/Index.vue"),
+        meta: {
+          roles: ["doctor"],
+          title: "工作日历",
           icon: "",
           isHide: false,
         },
