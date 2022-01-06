@@ -43,6 +43,17 @@
         <el-form-item label="患者姓名：">
           <el-input v-model="filter.userName"></el-input>
         </el-form-item>
+        <el-form-item label="就诊类型：">
+          <el-select v-model="filter.type">
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <!-- <el-form-item>
           <el-button type="primary" @click="onSubmit">筛选</el-button>
         </el-form-item> -->
@@ -57,14 +68,21 @@
         <el-table-column label="操作">
           <template #default="scope">
             <el-button
-              type="text"
+              type="primary"
               size="small"
-              @click="toRegistrationPage(scope.row)"
+              @click="finishSeeDoctor(scope.row)"
               >就诊完成</el-button
             >
           </template>
         </el-table-column>
       </el-table>
+      <Pagination
+        :currentPage="pageInfo.currentPage"
+        :pageSize="pageInfo.pageSize"
+        :total="pageInfo.total"
+        @handleCurrentChange="handleCurrentChange"
+        @handleSizeChange="handleSizeChange"
+      ></Pagination>
     </el-card>
   </div>
 </template>
@@ -73,7 +91,9 @@
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import { formatDate } from "@/utils/formatTime";
+import Pagination from "@/components/Pagination.vue";
 export default defineComponent({
+  components: { Pagination },
   name: "WorkTimeInfo",
   setup() {
     const route = useRoute();
@@ -83,6 +103,12 @@ export default defineComponent({
         startTime: "",
         endTime: "",
         userName: "",
+        type: "0",
+      },
+      pageInfo: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
       },
       tableData: [
         {
@@ -104,9 +130,20 @@ export default defineComponent({
           desc: "擅长治疗儿童常见病多发病。尤其对儿童各种类型癫痫，抽动障碍，发育迟缓，各种脑损伤（新生儿缺血缺氧性脑病，早产低体重，头外伤，各种脑炎）的评估与干预指导，遗传代谢病，反复呼吸道感染，慢性咳嗽，儿童支气管哮喘有比较深入的研究。",
         },
       ],
-    });
-    onMounted(() => {
-      getDay();
+      typeOptions: [
+        {
+          label: "未就诊",
+          value: "0",
+        },
+        {
+          label: "已就诊",
+          value: "1",
+        },
+        {
+          label: "全部",
+          value: "2",
+        },
+      ],
     });
     /**
      * @description 获取今天日期或者日历跳转日期
@@ -116,7 +153,28 @@ export default defineComponent({
       queryDay.value = route.query.day ? route.query.day : toDay;
       state.filter.startTime = queryDay.value;
     };
-    return { ...toRefs(state) };
+    /**
+     * @description 就诊完成
+     */
+    const finishSeeDoctor = (row: any) => {
+      console.log(row);
+    };
+    const handleCurrentChange = (page: number) => {
+      state.pageInfo.currentPage = page;
+    };
+    const handleSizeChange = (pageSize: number) => {
+      state.pageInfo.pageSize = pageSize;
+      state.pageInfo.currentPage = 1;
+    };
+    onMounted(() => {
+      getDay();
+    });
+    return {
+      ...toRefs(state),
+      finishSeeDoctor,
+      handleCurrentChange,
+      handleSizeChange,
+    };
   },
 });
 </script>

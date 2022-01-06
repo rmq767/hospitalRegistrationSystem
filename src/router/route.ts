@@ -147,6 +147,39 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           isHide: false,
         },
       },
+      {
+        path: "/doctor/worktime/adjust",
+        name: "WorkTimeToAdjust",
+        component: () => import("@/views/Doctor/WorkTime/WorkTimeToAdjust.vue"),
+        meta: {
+          roles: ["doctor"],
+          title: "时间调整",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/admin/doctor/manage",
+        name: "AdminDoctorManage",
+        component: () => import("@/views/Admin/DoctorManage/Index.vue"),
+        meta: {
+          roles: ["admin"],
+          title: "医生管理",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/admin/user/manage",
+        name: "AdminUserManage",
+        component: () => import("@/views/Admin/UserManage/Index.vue"),
+        meta: {
+          roles: ["admin"],
+          title: "用户管理",
+          icon: "",
+          isHide: false,
+        },
+      },
     ],
   },
 ];

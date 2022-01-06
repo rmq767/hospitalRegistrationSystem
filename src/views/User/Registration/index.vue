@@ -3,15 +3,18 @@
     <Department @change="changeDepartment" />
     <DoctorTable />
     <Pagination
-      @handleSizeChange="handleSizeChange"
+      :currentPage="pageInfo.currentPage"
+      :pageSize="pageInfo.pageSize"
+      :total="pageInfo.total"
       @handleCurrentChange="handleCurrentChange"
+      @handleSizeChange="handleSizeChange"
     ></Pagination>
   </div>
 </template>
 
 <script lang="ts">
 import Pagination from "@/components/Pagination.vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
 import Department from "./components/Department.vue";
 import DoctorTable from "./components/DoctorTable.vue";
 export default defineComponent({
@@ -22,6 +25,14 @@ export default defineComponent({
     Pagination,
   },
   setup() {
+    const state = reactive({
+      pageInfo: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
+      },
+    });
+
     /**
      * @description 选择科室
      */
@@ -40,7 +51,12 @@ export default defineComponent({
     const handleCurrentChange = (page: number) => {
       console.log(page);
     };
-    return { changeDepartment, handleSizeChange, handleCurrentChange };
+    return {
+      ...toRefs(state),
+      changeDepartment,
+      handleSizeChange,
+      handleCurrentChange,
+    };
   },
 });
 </script>
