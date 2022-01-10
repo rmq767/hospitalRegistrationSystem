@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
-import { Doctor } from "@/utils/interface/doctor";
+import { DoctorInterface } from "@/utils/interface/doctor";
 export default defineComponent({
   name: "DoctorTable",
   setup() {
@@ -69,7 +69,7 @@ export default defineComponent({
       ],
     });
     const router = useRouter();
-    const toRegistrationPage = (row: Doctor) => {
+    const toRegistrationPage = (row: DoctorInterface) => {
       router.push({ name: "DoctorRegistration", params: { id: row.name } });
     };
     return { ...toRefs(state), toRegistrationPage };

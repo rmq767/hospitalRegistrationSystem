@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
-import { Doctor } from "@/utils/interface/doctor";
+import { DoctorInterface } from "@/utils/interface/doctor";
 export default defineComponent({
   name: "DoctorList",
   setup() {
@@ -53,10 +53,10 @@ export default defineComponent({
           department: "儿科",
           desc: "擅长治疗儿童常见病多发病。尤其对儿童各种类型癫痫，抽动障碍，发育迟缓，各种脑损伤（新生儿缺血缺氧性脑病，早产低体重，头外伤，各种脑炎）的评估与干预指导，遗传代谢病，反复呼吸道感染，慢性咳嗽，儿童支气管哮喘有比较深入的研究。",
         },
-      ] as Doctor[],
+      ] as DoctorInterface[],
     });
     const router = useRouter();
-    const toDoctorInfo = (row: Doctor) => {
+    const toDoctorInfo = (row: DoctorInterface) => {
       router.push({ name: "DoctorInfo", params: { id: row.name } });
     };
     return { ...toRefs(state), toDoctorInfo };

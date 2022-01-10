@@ -14,7 +14,7 @@
           </el-form-item>
           <el-form-item label="年龄：">
             <el-input-number
-              v-model="userInfoForm.years"
+              v-model="userInfoForm.age"
               :min="0"
               :max="100"
               size="large"
@@ -45,7 +45,7 @@ export default defineComponent({
     const state = reactive({
       userInfoForm: {
         name: "王仙芝",
-        years: 30,
+        age: 30,
         id: 123,
         phone: 456,
       },

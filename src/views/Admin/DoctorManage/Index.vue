@@ -35,7 +35,10 @@
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button type="primary" size="small" @click="edit(scope.row)"
+            <el-button
+              type="primary"
+              size="small"
+              @click="editDoctor(scope.row)"
               >修改</el-button
             >
           </template>
@@ -49,13 +52,28 @@
         @handleSizeChange="handleSizeChange"
       ></Pagination>
     </el-card>
+    <DoctorInfoDialog
+      :info="doctorInfo"
+      ref="doctorDialogEl"
+    ></DoctorInfoDialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import { ElDialog } from "element-plus";
+import {
+  defineComponent,
+  getCurrentInstance,
+  nextTick,
+  reactive,
+  toRefs,
+} from "vue";
+import DoctorInfoDialog from "./components/DoctorInfo.vue";
 export default defineComponent({
   name: "AdminDoctorManage",
+  components: {
+    DoctorInfoDialog,
+  },
   setup() {
     const state = reactive({
       filterForm: {
@@ -66,7 +84,7 @@ export default defineComponent({
       doctorTable: [
         {
           name: "李淳罡",
-          accout: "123",
+          account: "123",
           age: 31,
           department: "儿科",
           type: "专家",
@@ -83,7 +101,7 @@ export default defineComponent({
           label: "医生姓名",
         },
         {
-          prop: "accout",
+          prop: "account",
           label: "账号",
         },
         {
@@ -99,12 +117,22 @@ export default defineComponent({
           label: "级别",
         },
       ],
+      doctorInfo: null,
+      doctorDialogEl: ElDialog,
     });
     const onSubmit = () => {
       console.log(state.filterForm);
     };
-    const addDoctor = () => {};
-    const edit = (row: any) => {};
+    const addDoctor = () => {
+      state.doctorInfo = null;
+      state.doctorDialogEl.open();
+    };
+    const editDoctor = (row: any) => {
+      nextTick(() => {
+        state.doctorInfo = Object.assign({}, row);
+      });
+      state.doctorDialogEl.open();
+    };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
     };
@@ -116,7 +144,7 @@ export default defineComponent({
       ...toRefs(state),
       onSubmit,
       addDoctor,
-      edit,
+      editDoctor,
       handleCurrentChange,
       handleSizeChange,
     };

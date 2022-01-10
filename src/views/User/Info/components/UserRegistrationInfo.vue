@@ -25,15 +25,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import User from "@/utils/interface/user";
+import { UserInterface } from "@/utils/interface/user";
 import { useRouter } from "vue-router";
 export default defineComponent({
   name: "UserRegistrationInfo",
   props: {
     info: {
-      type: Object as PropType<User>,
+      type: Object as PropType<UserInterface>,
       default: () => {},
     },
   },
