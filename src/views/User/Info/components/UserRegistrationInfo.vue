@@ -43,7 +43,7 @@ export default defineComponent({
      * @description 取消预约
      */
     const cancel = () => {
-      ElMessageBox.confirm("确定取消预约?", "提醒", {
+      ElMessageBox.confirm("确定取消预约?", "提示", {
         confirmButtonText: "确认",
         cancelButtonText: "取消",
         type: "warning",

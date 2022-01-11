@@ -159,8 +159,9 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/admin/doctor/manage",
-        name: "AdminDoctorManage",
+        path: "/admin/doctor",
+        name: "AdminDoctor",
+        redirect: "/admin/doctor/manage",
         component: () => import("@/views/Admin/DoctorManage/Index.vue"),
         meta: {
           roles: ["admin"],
@@ -168,10 +169,24 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           icon: "",
           isHide: false,
         },
+        children: [
+          {
+            path: "/admin/doctor/manage",
+            name: "AdminDoctorManage",
+            component: () => import("@/views/Admin/DoctorManage/Index.vue"),
+            meta: {
+              roles: ["admin"],
+              title: "账号信息",
+              icon: "",
+              isHide: false,
+            },
+          },
+        ],
       },
       {
-        path: "/admin/user/manage",
-        name: "AdminUserManage",
+        path: "/admin/user",
+        name: "AdminUser",
+        redirect: "/admin/user/manage",
         component: () => import("@/views/Admin/UserManage/Index.vue"),
         meta: {
           roles: ["admin"],
@@ -179,6 +194,66 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           icon: "",
           isHide: false,
         },
+        children: [
+          {
+            path: "/admin/user/manage",
+            name: "AdminUserManage",
+            component: () => import("@/views/Admin/UserManage/Index.vue"),
+            meta: {
+              roles: ["admin"],
+              title: "账号信息",
+              icon: "",
+              isHide: false,
+            },
+          },
+        ],
+      },
+      {
+        path: "/setting",
+        name: "Setting",
+        redirect: "/setting/department",
+        component: () => import("@/views/Setting/Department/Index.vue"),
+        meta: {
+          roles: ["admin"],
+          title: "基本管理",
+          icon: "",
+          isHide: false,
+        },
+        children: [
+          {
+            path: "/setting/department",
+            name: "SettingDepartment",
+            component: () => import("@/views/Setting/Department/Index.vue"),
+            meta: {
+              roles: ["admin"],
+              title: "科室管理",
+              icon: "",
+              isHide: false,
+            },
+          },
+          {
+            path: "/setting/notice",
+            name: "SettingNotice",
+            component: () => import("@/views/Setting/Notice/Index.vue"),
+            meta: {
+              roles: ["admin"],
+              title: "公告管理",
+              icon: "",
+              isHide: false,
+            },
+          },
+          {
+            path: "/setting/evaluation",
+            name: "SettingEvaluation",
+            component: () => import("@/views/Setting/Evaluation/Index.vue"),
+            meta: {
+              roles: ["admin"],
+              title: "评价管理",
+              icon: "",
+              isHide: false,
+            },
+          },
+        ],
       },
     ],
   },
