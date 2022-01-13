@@ -40,15 +40,49 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="18" :offset="0"> </el-col>
-      <el-col :span="6" :offset="0"> </el-col>
+      <el-col :span="18" :offset="0">
+        <el-row :gutter="20">
+          <el-col :span="12" :offset="0">
+            <el-card class="mb20">
+              <div id="lineCharts1" style="width: 100%; height: 400px"></div>
+            </el-card>
+          </el-col>
+          <el-col :span="12" :offset="0">
+            <el-card>
+              <div id="pieCharts" style="width: 100%; height: 400px"></div>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-card>
+          <div id="lineCharts" style="width: 100%; height: 400px"></div>
+        </el-card>
+      </el-col>
+      <el-col :span="6" :offset="0">
+        <el-card style="height: 100%">
+          <el-timeline>
+            <el-timeline-item
+              v-for="(activity, index) in activities"
+              :key="index"
+              :type="activity.type"
+              :color="activity.color"
+              :size="activity.size"
+              :hollow="activity.hollow"
+              :timestamp="activity.timestamp"
+            >
+              {{ activity.content }}
+            </el-timeline-item>
+          </el-timeline>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import * as echarts from "echarts";
 
+type EChartsOption = echarts.EChartsOption;
 export default defineComponent({
   name: "Home",
   components: {},
@@ -60,32 +94,6 @@ export default defineComponent({
         userName: "admin",
       },
       currentTime: new Date().toLocaleDateString(),
-      environmentList: [
-        {
-          icon: "iconfont icon-yangan",
-          label: "烟感",
-          value: "2.1%OBS/M",
-          iconColor: "#F72B3F",
-        },
-        {
-          icon: "iconfont icon-wendu",
-          label: "温度",
-          value: "30℃",
-          iconColor: "#91BFF8",
-        },
-        {
-          icon: "iconfont icon-shidu",
-          label: "湿度",
-          value: "57%RH",
-          iconColor: "#88D565",
-        },
-        {
-          icon: "iconfont icon-zaosheng",
-          label: "噪声",
-          value: "57DB",
-          iconColor: "#FBD4A0",
-        },
-      ],
       topCardItemList: [
         {
           title: "今日访问人数",
@@ -115,6 +123,176 @@ export default defineComponent({
           icon: "iconfont icon-shenqingkaiban",
         },
       ],
+      activities: [
+        {
+          content: "Custom icon",
+          timestamp: "2018-04-12 20:46",
+          size: "large",
+          type: "primary",
+        },
+        {
+          content: "Custom color",
+          timestamp: "2018-04-03 20:46",
+          color: "#0bbd87",
+        },
+        {
+          content: "Custom size",
+          timestamp: "2018-04-03 20:46",
+          size: "large",
+        },
+        {
+          content: "Custom hollow",
+          timestamp: "2018-04-03 20:46",
+          type: "primary",
+          hollow: true,
+        },
+        {
+          content: "Default node",
+          timestamp: "2018-04-03 20:46",
+        },
+      ],
+    });
+    const init1 = () => {
+      var chartDom = document.getElementById("lineCharts")!;
+      var myChart = echarts.init(chartDom);
+      var option: EChartsOption;
+
+      option = {
+        xAxis: {
+          type: "category",
+          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
+          {
+            data: [150, 230, 224, 218, 135, 147, 260],
+            type: "line",
+          },
+        ],
+      };
+      option && myChart.setOption(option);
+    };
+    const init2 = () => {
+      var chartDom = document.getElementById("lineCharts1")!;
+      var myChart = echarts.init(chartDom);
+      var option: EChartsOption;
+      option = {
+        title: {
+          text: "Stacked Line",
+        },
+        tooltip: {
+          trigger: "axis",
+        },
+        legend: {
+          data: ["Email", "Union Ads", "Video Ads", "Direct", "Search Engine"],
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
+          {
+            name: "Email",
+            type: "line",
+            stack: "Total",
+            data: [120, 132, 101, 134, 90, 230, 210],
+          },
+          {
+            name: "Union Ads",
+            type: "line",
+            stack: "Total",
+            data: [220, 182, 191, 234, 290, 330, 310],
+          },
+          {
+            name: "Video Ads",
+            type: "line",
+            stack: "Total",
+            data: [150, 232, 201, 154, 190, 330, 410],
+          },
+          {
+            name: "Direct",
+            type: "line",
+            stack: "Total",
+            data: [320, 332, 301, 334, 390, 330, 320],
+          },
+          {
+            name: "Search Engine",
+            type: "line",
+            stack: "Total",
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    };
+
+    const init3 = () => {
+      var chartDom = document.getElementById("pieCharts")!;
+      var myChart = echarts.init(chartDom);
+      var option: EChartsOption;
+
+      option = {
+        legend: {
+          top: "bottom",
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
+        series: [
+          {
+            name: "Nightingale Chart",
+            type: "pie",
+            radius: [20, 100],
+            center: ["50%", "50%"],
+            roseType: "area",
+            itemStyle: {
+              borderRadius: 8,
+            },
+            data: [
+              { value: 40, name: "rose 1" },
+              { value: 38, name: "rose 2" },
+              { value: 32, name: "rose 3" },
+              { value: 30, name: "rose 4" },
+              { value: 28, name: "rose 5" },
+              { value: 26, name: "rose 6" },
+              { value: 22, name: "rose 7" },
+              { value: 18, name: "rose 8" },
+            ],
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    };
+
+    onMounted(() => {
+      init1();
+      init2();
+      init3();
     });
     return { ...toRefs(state) };
   },
