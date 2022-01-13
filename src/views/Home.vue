@@ -39,6 +39,10 @@
         </div>
       </el-col>
     </el-row>
+    <el-row :gutter="20">
+      <el-col :span="18" :offset="0"> </el-col>
+      <el-col :span="6" :offset="0"> </el-col>
+    </el-row>
   </div>
 </template>
 

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { Session } from "@/utils/session";
@@ -7,7 +7,7 @@ import { initFrontEndControlRoutes } from "./frond";
 import store from "@/store";
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(process.env.BASE_URL),
   routes: staticRoutes,
 });
 
