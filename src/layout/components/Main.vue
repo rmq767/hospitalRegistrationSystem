@@ -1,9 +1,12 @@
 <template>
-  <el-main>
-    <el-scrollbar>
+  <el-scrollbar
+    class="layout-scrollbar"
+    :style="{ maxHeight: `calc(100vh - 60px)` }"
+  >
+    <el-main>
       <router-view></router-view>
-    </el-scrollbar>
-  </el-main>
+    </el-main>
+  </el-scrollbar>
 </template>
 
 <script lang="ts">

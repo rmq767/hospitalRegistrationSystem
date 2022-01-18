@@ -2,7 +2,7 @@
   <el-container class="layout-container">
     <Header />
     <el-container class="layout-backtop">
-      <Aside />
+      <Aside v-if="!isCommon" />
       <Main />
     </el-container>
     <el-backtop target=".layout-backtop .el-scrollbar__wrap"></el-backtop>
@@ -10,7 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { Session } from "@/utils/session";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import Aside from "./components/Aside.vue";
 import Header from "./components/Header.vue";
 import Main from "./components/Main.vue";
@@ -22,7 +23,10 @@ export default defineComponent({
     Main,
   },
   setup() {
-    return {};
+    const isCommon = computed(() => {
+      return Session.get("userInfo").roles[0] === "common";
+    });
+    return { isCommon };
   },
 });
 </script>

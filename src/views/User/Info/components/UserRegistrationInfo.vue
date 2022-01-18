@@ -21,16 +21,21 @@
         <el-tag size="small">{{ info.department }}</el-tag>
       </el-descriptions-item>
     </el-descriptions>
+    <Evaluation ref="evaluationEl"></Evaluation>
   </el-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { defineComponent, PropType, reactive, toRefs } from "vue";
+import { ElMessageBox, ElMessage, ElDialog } from "element-plus";
 import { UserInterface } from "@/utils/interface/user";
 import { useRouter } from "vue-router";
+import Evaluation from "./Evaluation.vue";
 export default defineComponent({
   name: "UserRegistrationInfo",
+  components: {
+    Evaluation,
+  },
   props: {
     info: {
       type: Object as PropType<UserInterface>,
@@ -39,6 +44,9 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter();
+    const state = reactive({
+      evaluationEl: ElDialog,
+    });
     /**
      * @description 取消预约
      */
@@ -60,9 +68,11 @@ export default defineComponent({
      * @description 评价
      */
     const evaluation = () => {
-      router.push({ name: "Evaluation", params: { id: props.info.id } });
+      // router.push({ name: "Evaluation", params: { id: props.info.id } });
+      console.log(state.evaluationEl);
+      state.evaluationEl.open();
     };
-    return { cancel, evaluation };
+    return { ...toRefs(state), cancel, evaluation };
   },
 });
 </script>

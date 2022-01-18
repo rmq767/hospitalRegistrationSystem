@@ -3,7 +3,7 @@
     <el-form-item>
       <el-input
         type="text"
-        placeholder="用户名 admin 或不输均为 test"
+        placeholder="common/doctor/admin"
         v-model="ruleForm.userName"
         clearable
         autocomplete="off"
@@ -92,17 +92,22 @@ export default defineComponent({
       },
     });
     const onSignIn = async () => {
-      let info = {
-        roles: ["admin"],
-      };
-      Session.set("token", "token");
-      Session.set("userInfo", info);
-      /**
-       * @description 添加动态路由
-       */
-      await initFrontEndControlRoutes();
-      router.push("/");
-      ElMessage.success("登录成功！");
+      let role = ["common", "doctor", "admin"];
+      if (role.includes(state.ruleForm.userName)) {
+        let info = {
+          roles: [state.ruleForm.userName],
+        };
+        Session.set("token", "token");
+        Session.set("userInfo", info);
+        /**
+         * @description 添加动态路由
+         */
+        await initFrontEndControlRoutes();
+        router.push("/");
+        ElMessage.success("登录成功！");
+      } else {
+        ElMessage.error("账号不存在");
+      }
     };
     return { ...toRefs(state), onSignIn };
   },

@@ -1,8 +1,9 @@
 <template>
   <el-aside width="200px">
-    <el-scrollbar>
+    <el-scrollbar :style="{ maxHeight: `calc(100vh - 60px)` }">
       <el-menu
         router
+        :mode="mode"
         :default-active="defaultActive"
         background-color="transparent"
       >
@@ -50,6 +51,12 @@ export default defineComponent({
     Setting,
     IconMenu,
     SubItem,
+  },
+  props: {
+    mode: {
+      type: String,
+      default: "vertical",
+    },
   },
   setup() {
     const store = useStore();

@@ -2,6 +2,14 @@
   <el-header>
     <div class="header">
       <h2 class="title">医院挂号系统</h2>
+      <div class="aside">
+        <Aside
+          mode="horizontal"
+          width="100%"
+          style="box-shadow: none"
+          v-if="isCommon"
+        ></Aside>
+      </div>
       <div class="user">
         <el-avatar
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -24,16 +32,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { ArrowDown } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { Session } from "@/utils/session";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { resetRoute } from "@/router/index";
+import Aside from "./Aside.vue";
 export default defineComponent({
   name: "Header",
   components: {
     ArrowDown,
+    Aside,
   },
   setup() {
     const router = useRouter();
@@ -50,6 +60,9 @@ export default defineComponent({
           break;
       }
     };
+    const isCommon = computed(() => {
+      return Session.get("userInfo").roles[0] === "common";
+    });
     /**
      * @description 跳转个人信息
      */
@@ -91,7 +104,7 @@ export default defineComponent({
         })
         .catch(() => {});
     };
-    return { chooseMenu };
+    return { chooseMenu, isCommon };
   },
 });
 </script>
@@ -105,6 +118,9 @@ export default defineComponent({
   .user {
     display: flex;
     align-items: center;
+  }
+  .aside {
+    flex: 1;
   }
 }
 .el-header {

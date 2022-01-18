@@ -195,17 +195,22 @@ router.beforeEach(async (to, from, next) => {
   NProgress.configure({ showSpinner: false });
   if (to.meta.title) NProgress.start();
   const token = Session.get("token");
-  if (to.path === "/login" && !token) {
+  const role = Session.get("userInfo") && Session.get("userInfo").roles[0];
+  if (to.path === "/login" && (!token || !role)) {
     next();
     NProgress.done();
   } else {
-    if (!token) {
+    if (!token || !role) {
       next(`/login`);
       Session.clear();
       resetRoute();
       NProgress.done();
     } else if (token && to.path === "/login") {
-      next("/home");
+      if (role === "common") {
+        next("/userhome");
+      } else {
+        next("/home");
+      }
       NProgress.done();
     } else {
       // if (store.state.routesList.routesList.length === 0) {

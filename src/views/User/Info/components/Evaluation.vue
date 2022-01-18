@@ -1,16 +1,14 @@
 <template>
-  <el-card>
-    <div class="evaluation">
-      <div class="evaluation-item">
-        <span>评价类型：</span>
+  <el-dialog v-model="dialogFormVisible" title="评价">
+    <el-form :model="form" label-width="100px">
+      <el-form-item label="评价类型：">
         <el-radio-group v-model="form.type">
           <el-radio label="1">表扬</el-radio>
           <el-radio label="2">建议</el-radio>
           <el-radio label="3">投诉</el-radio>
         </el-radio-group>
-      </div>
-      <div class="evaluation-item">
-        <span>医生评价：</span>
+      </el-form-item>
+      <el-form-item label="医生评价：">
         <el-rate
           v-model="form.doctor"
           :colors="colors"
@@ -18,9 +16,8 @@
           show-text
         >
         </el-rate>
-      </div>
-      <div class="evaluation-item">
-        <span>医院评价：</span>
+      </el-form-item>
+      <el-form-item label="医院评价：">
         <el-rate
           v-model="form.hospital"
           :colors="colors"
@@ -28,22 +25,23 @@
           show-text
         >
         </el-rate>
-      </div>
-      <div class="evaluation-item">
-        <span>建议：</span>
+      </el-form-item>
+      <el-form-item label="建议：">
         <el-input
           v-model="form.advice"
           type="textarea"
           placeholder="您有什么宝贵的意见，都可以说哦"
           :rows="4"
         ></el-input>
-      </div>
-      <div class="evaluation-item">
-        <span></span>
-        <el-button type="primary" @click="onSubmit">提交</el-button>
-      </div>
-    </div>
-  </el-card>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="onSubmit">评价</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -54,6 +52,7 @@ export default defineComponent({
     const colors = ref(["#99A9BF", "#F7BA2A", "#FF9900"]);
     const texts = ref(["很差", "差", "一般", "好", "很好"]);
     const state = reactive({
+      dialogFormVisible: false,
       form: {
         type: "1",
         doctor: null,
@@ -61,10 +60,17 @@ export default defineComponent({
         advice: "",
       },
     });
+    const open = () => {
+      state.dialogFormVisible = true;
+    };
+    const close = () => {
+      state.dialogFormVisible = false;
+    };
     const onSubmit = () => {
       console.log(state.form);
+      close();
     };
-    return { ...toRefs(state), colors, texts, onSubmit };
+    return { ...toRefs(state), colors, texts, onSubmit, open };
   },
 });
 </script>

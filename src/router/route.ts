@@ -1,3 +1,4 @@
+import { Session } from "@/utils/session";
 import { RouteRecordRaw } from "vue-router";
 
 /**
@@ -11,7 +12,14 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "/",
-    redirect: "/home",
+    redirect: () => {
+      let role = Session.get("userInfo").roles[0];
+      if (role === "common") {
+        return "/userhome";
+      } else {
+        return "home";
+      }
+    },
     component: () => import("@/layout/Home.vue"),
     children: [
       {
@@ -20,7 +28,18 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Home.vue"),
         meta: {
           title: "首页",
-          roles: ["admin", "common", "doctor"],
+          roles: ["admin", "doctor"],
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/userhome",
+        name: " UserHome",
+        component: () => import("@/views/UserHome.vue"),
+        meta: {
+          title: "首页",
+          roles: ["common"],
           icon: "",
           isHide: false,
         },
@@ -114,17 +133,17 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           isHide: true,
         },
       },
-      {
-        path: "/evaluation/:id",
-        name: "Evaluation",
-        component: () => import("@/views/User/Evaluation/Index.vue"),
-        meta: {
-          roles: ["common"],
-          title: "用户评价",
-          icon: "",
-          isHide: false,
-        },
-      },
+      // {
+      //   path: "/evaluation/:id",
+      //   name: "Evaluation",
+      //   component: () => import("@/views/User/Evaluation/Index.vue"),
+      //   meta: {
+      //     roles: ["common"],
+      //     title: "用户评价",
+      //     icon: "",
+      //     isHide: false,
+      //   },
+      // },
       {
         path: "/doctor/worktime/info",
         name: "WorkTimeInfo",
