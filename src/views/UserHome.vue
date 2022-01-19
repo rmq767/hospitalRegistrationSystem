@@ -1,77 +1,109 @@
 <template>
-  <div class="home-container">1</div>
+  <div class="home-container">
+    <section>
+      <el-carousel height="630px">
+        <el-carousel-item v-for="item in bannerList" :key="item">
+          <img class="banner-img" :src="item" alt="" />
+        </el-carousel-item>
+      </el-carousel>
+    </section>
+    <section class="content">
+      <section class="news-home">
+        <div class="news-banner">
+          <el-carousel
+            height="300px"
+            indicator-position="outside"
+            style="width: 400px"
+            arrow="never"
+          >
+            <el-carousel-item v-for="item in newsBanner" :key="item">
+              <img class="banner-img" :src="item" alt="" />
+              <div class="news-banner-title">news</div>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <div class="news-list">
+          <NewsList
+            :title="['医院公告', '医院新闻']"
+            width="100%"
+            :data="newsData"
+          ></NewsList>
+        </div>
+      </section>
+    </section>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import NewsList from "@/components/NewsList.vue";
+
 export default defineComponent({
   name: "UserHome",
-  components: {},
+  components: { NewsList },
   setup() {
     const state = reactive({
-      getUserInfos: {
-        photo:
-          "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-        userName: "admin",
+      bannerList: [
+        "https://www.pdfy999.com/Uploads/Picture/2021-06-04/60b9ddd465ef0.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2017-12-08/5a2a305de47fa.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2017-12-08/5a2a3078c3c3f.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2017-12-08/5a2a306886590.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2021-04-21/607f9a1f149e6.JPG",
+      ],
+      newsBanner: [
+        "https://www.pdfy999.com/Uploads/Picture/2021-12-12/61b5bf98c2258.png",
+        "https://www.pdfy999.com/Uploads/Picture/2021-12-08/61aff8a32cdf6.png",
+        "https://www.pdfy999.com/Uploads/Picture/2021-11-30/61a5d6727bbea.png",
+      ],
+      newsData: {
+        noticeList: [
+          {
+            title: "2022年住院医师规范化培训招生简章",
+            date: "2021-12-27",
+          },
+          {
+            title: "攀大附院2022年规培护士招生简章",
+            date: "2021-12-27",
+          },
+          {
+            title: "攀枝花学院附属医院检验技师招聘公告",
+            date: "2021-12-27",
+          },
+          {
+            title: "攀枝花学院附属医院招聘启事",
+            date: "2021-12-27",
+          },
+          {
+            title: "攀枝花学院附属医院招聘启事",
+            date: "2021-12-27",
+          },
+        ],
+        newsList: [
+          {
+            title: `追剧《火红年华》，传承“三线精神”，攀大附院举行大型义诊活动`,
+            date: "2021-12-27",
+          },
+          {
+            title:
+              "四川省推进中医药强省建设工作领导小组副组长，省中医药管理局党组书记、局长田兴军莅临我院调研指导工作",
+            date: "2021-12-27",
+          },
+          {
+            title:
+              "诊问题，解难题，同担当，助发展，市卫健委党政领导莅临我院调研指导",
+            date: "2021-12-27",
+          },
+          {
+            title:
+              "牵手德昌—攀大附院联盟医院暨眼科专家工作站在德昌县中医医院挂牌",
+            date: "2021-12-27",
+          },
+          {
+            title: "牵手宁蒗—攀大附院联盟医院在宁蒗县中医医院挂牌",
+            date: "2021-12-27",
+          },
+        ],
       },
-      currentTime: new Date().toLocaleDateString(),
-      topCardItemList: [
-        {
-          title: "今日访问人数",
-          titleNum: "123",
-          tip: "在场人数",
-          tipNum: "911",
-          color: "#F95959",
-          iconColor: "#F86C6B",
-          icon: "iconfont icon-jinridaiban",
-        },
-        {
-          title: "实验室总数",
-          titleNum: "123",
-          tip: "使用中",
-          tipNum: "611",
-          color: "#8595F4",
-          iconColor: "#92A1F4",
-          icon: "iconfont icon-AIshiyanshi",
-        },
-        {
-          title: "申请人数（月）",
-          titleNum: "123",
-          tip: "通过人数",
-          tipNum: "911",
-          color: "#FEBB50",
-          iconColor: "#FDC566",
-          icon: "iconfont icon-shenqingkaiban",
-        },
-      ],
-      activities: [
-        {
-          content: "Custom icon",
-          timestamp: "2018-04-12 20:46",
-          size: "large",
-          type: "primary",
-        },
-        {
-          content: "Custom color",
-          timestamp: "2018-04-03 20:46",
-          color: "#0bbd87",
-        },
-        {
-          content: "Custom size",
-          timestamp: "2018-04-03 20:46",
-          size: "large",
-        },
-        {
-          content: "Custom hollow",
-          timestamp: "2018-04-03 20:46",
-          type: "primary",
-          hollow: true,
-        },
-        {
-          content: "Default node",
-          timestamp: "2018-04-03 20:46",
-        },
-      ],
     });
 
     onMounted(() => {});
@@ -83,154 +115,42 @@ export default defineComponent({
 <style lang="scss" scoped>
 .home-container {
   overflow-x: hidden;
-  .home-card-item {
-    width: 100%;
-    height: 103px;
-    background: var(--el-text-color-secondary);
-    border-radius: 4px;
-    transition: all ease 0.3s;
-    &:hover {
-      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-      transition: all ease 0.3s;
-    }
-  }
-  .home-card-item-box {
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    &:hover {
-      i {
-        right: 0px !important;
-        bottom: 0px !important;
-        transition: all ease 0.3s;
+  .content {
+    width: 1200px;
+    margin: 0 auto;
+    .news-banner {
+      margin-right: 40px;
+      .news-banner-title {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 30px;
+        line-height: 30px;
+        width: 400px;
+        color: #fff;
+        vertical-align: middle;
+        padding: 0 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
-    i {
-      position: absolute;
-      right: -10px;
-      bottom: -10px;
-      font-size: 70px;
-      transform: rotate(-30deg);
-      transition: all ease 0.3s;
-    }
-    .home-card-item-flex {
-      padding: 0 20px;
-      color: var(--color-whites);
-      .home-card-item-title,
-      .home-card-item-tip {
-        font-size: 13px;
-      }
-      .home-card-item-title-num {
-        font-size: 18px;
-      }
-      .home-card-item-tip-num {
-        font-size: 13px;
-      }
-    }
-  }
-  .home-card-first {
-    background: var(--el-color-white);
-    border: 1px solid var(--el-border-color-light, #ebeef5);
-    display: flex;
-    align-items: center;
-    img {
-      width: 60px;
-      height: 60px;
-      border-radius: 100%;
-      border: 2px solid var(--color-primary-light-5);
-    }
-    .home-card-first-right {
+    .news-list {
       flex: 1;
+    }
+    .news-home {
       display: flex;
-      flex-direction: column;
-      .home-card-first-right-title {
-        color: var(--el-color-black);
-      }
-      .home-card-first-right-msg {
-        font-size: 13px;
-        color: var(--el-text-color-secondary);
-      }
     }
   }
-  .home-monitor {
-    height: 200px;
-    .flex-warp-item {
-      width: 50%;
-      height: 100px;
-      display: flex;
-      .flex-warp-item-box {
-        margin: auto;
-        height: auto;
-        text-align: center;
-        color: var(--el-text-color-primary);
-      }
-    }
-  }
-  .home-warning-card {
-    height: 292px;
-    ::v-deep(.el-card) {
-      height: 100%;
-    }
-  }
-  .home-dynamic {
-    height: 200px;
-    .home-dynamic-item {
-      display: flex;
-      width: 100%;
-      height: 60px;
-      overflow: hidden;
-      &:first-of-type {
-        .home-dynamic-item-line {
-          i {
-            color: orange !important;
-          }
-        }
-      }
-      .home-dynamic-item-left {
-        text-align: right;
-        .home-dynamic-item-left-time1 {
-        }
-        .home-dynamic-item-left-time2 {
-          font-size: 13px;
-          color: var(--el-text-color-secondary);
-        }
-      }
-      .home-dynamic-item-line {
-        height: 60px;
-        border-right: 2px dashed var(--el-border-color-light, #ebeef5);
-        margin: 0 20px;
-        position: relative;
-        i {
-          color: var(--color-primary);
-          font-size: 12px;
-          position: absolute;
-          top: 1px;
-          left: -6px;
-          transform: rotate(46deg);
-          background: var(--el-color-white);
-        }
-      }
-      .home-dynamic-item-right {
-        flex: 1;
-        .home-dynamic-item-right-title {
-          i {
-            margin-right: 5px;
-            border: 1px solid var(--el-border-color-light, #ebeef5);
-            width: 20px;
-            height: 20px;
-            border-radius: 100%;
-            padding: 3px 2px 2px;
-            text-align: center;
-            color: var(--color-primary);
-          }
-        }
-        .home-dynamic-item-right-label {
-          font-size: 13px;
-          color: var(--el-text-color-secondary);
-        }
-      }
-    }
-  }
+}
+section {
+  margin-bottom: 20px;
+}
+.banner-img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 </style>
