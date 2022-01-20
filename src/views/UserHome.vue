@@ -23,24 +23,64 @@
           </el-carousel>
         </div>
         <div class="news-list">
-          <NewsList
-            :title="['医院公告', '医院新闻']"
-            width="100%"
-            :data="newsData"
-          ></NewsList>
+          <NewsList :title="['医院公告', '医院新闻']" @getIndex="getNewsIndex">
+            <template #content>
+              <div
+                class="news-list-content"
+                v-for="(value, key) in newsData"
+                :key="key"
+                v-show="whichKey === key"
+              >
+                <p
+                  class="news-item"
+                  v-for="(item, index) in value"
+                  :key="index"
+                >
+                  <span class="news-title"><em>•</em> {{ item.title }}</span>
+                  <span class="news-date">{{ item.date }}</span>
+                </p>
+              </div>
+            </template>
+          </NewsList>
         </div>
+      </section>
+      <section class="doctor-team">
+        <NewsList :title="['专家团队']">
+          <template #content>
+            <div class="doctor-list">
+              <DoctorCard
+                class="mt20"
+                v-for="item in 5"
+                :key="item"
+              ></DoctorCard>
+            </div>
+          </template>
+        </NewsList>
+      </section>
+      <section class="department-list">
+        <NewsList :title="['科室导航']">
+          <template #content> 123 </template>
+        </NewsList>
+      </section>
+      <section class="hospital-show">
+        <NewsList :title="['附院风采']">
+          <template #content> 321 </template>
+        </NewsList>
       </section>
     </section>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import NewsList from "@/components/NewsList.vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import NewsHeader from "@/components/News/NewsHeader.vue";
+import DoctorCard from "@/components/DoctorCard.vue";
+
+import NewsList from "@/components/News/NewsList.vue";
 
 export default defineComponent({
   name: "UserHome",
-  components: { NewsList },
+  components: { NewsList, NewsHeader, DoctorCard },
   setup() {
     const state = reactive({
       bannerList: [
@@ -104,10 +144,17 @@ export default defineComponent({
           },
         ],
       },
+      active: 0,
     });
-
+    const getNewsIndex = (index: number) => {
+      state.active = index;
+    };
+    const whichKey = computed(() => {
+      let dataKeys = Object.keys(state.newsData);
+      return dataKeys[state.active];
+    });
     onMounted(() => {});
-    return { ...toRefs(state) };
+    return { ...toRefs(state), whichKey, getNewsIndex };
   },
 });
 </script>
@@ -139,9 +186,43 @@ export default defineComponent({
     }
     .news-list {
       flex: 1;
+      .news-list-content {
+        margin-top: 10px;
+        .news-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 40px;
+          margin-top: 10px;
+          .news-title {
+            font-size: 14px;
+            max-width: 680px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            &:hover {
+              color: var(--el-color-primary);
+            }
+            em {
+              color: var(--el-color-primary);
+            }
+          }
+          .news-date {
+            color: #999;
+            font-size: 12px;
+          }
+        }
+      }
     }
     .news-home {
       display: flex;
+    }
+    .doctor-team {
+      .doctor-list {
+        display: flex;
+        justify-content: space-evenly;
+      }
     }
   }
 }
@@ -152,5 +233,13 @@ section {
   height: 100%;
   width: 100%;
   object-fit: cover;
+}
+.more {
+  font-size: 12px;
+  color: #999;
+  cursor: pointer;
+  &:hover {
+    color: var(--el-color-primary);
+  }
 }
 </style>
