@@ -93,7 +93,7 @@ export function formatTwoStageRoutes(arr: any) {
   const newArr: any = [];
   // const cacheList: Array<string> = [];
   arr.forEach((v: any) => {
-    if (v.path === "/") {
+    if (v.path === "/admin") {
       newArr.push({
         component: v.component,
         name: v.name,
@@ -200,16 +200,14 @@ router.beforeEach(async (to, from, next) => {
     next();
     NProgress.done();
   } else {
-    if (!token || !role) {
-      next(`/login`);
+    if ((!token || !role) && to.meta.permission) {
+      next("/login");
       Session.clear();
       resetRoute();
       NProgress.done();
     } else if (token && to.path === "/login") {
-      if (role === "common") {
-        next("/userhome");
-      } else {
-        next("/home");
+      if (role === "admin" || role === "doctor") {
+        next("/adminhome");
       }
       NProgress.done();
     } else {

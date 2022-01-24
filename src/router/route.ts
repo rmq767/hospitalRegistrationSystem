@@ -10,38 +10,21 @@ import { RouteRecordRaw } from "vue-router";
  */
 export const dynamicRoutes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "/",
-    redirect: () => {
-      let role = Session.get("userInfo").roles[0];
-      if (role === "common") {
-        return "/userhome";
-      } else {
-        return "home";
-      }
-    },
+    path: "/admin",
+    name: "Admin",
+    redirect: "/adminhome",
     component: () => import("@/layout/Home.vue"),
     children: [
       {
-        path: "/home",
-        name: " Home",
-        component: () => import("@/views/Home.vue"),
+        path: "/adminhome",
+        name: "AdminHome",
+        component: () => import("@/views/AdminHome.vue"),
         meta: {
           title: "首页",
           roles: ["admin", "doctor"],
           icon: "",
           isHide: false,
-        },
-      },
-      {
-        path: "/userhome",
-        name: " UserHome",
-        component: () => import("@/views/UserHome.vue"),
-        meta: {
-          title: "首页",
-          roles: ["common"],
-          icon: "",
-          isHide: false,
+          permission: true,
         },
       },
       {
@@ -53,6 +36,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "关于我",
           icon: "",
           isHide: true,
+          permission: true,
         },
       },
       {
@@ -64,6 +48,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "修改密码",
           icon: "",
           isHide: true,
+          permission: true,
         },
       },
       {
@@ -153,6 +138,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "每日详情",
           icon: "",
           isHide: false,
+          permission: true,
         },
       },
       {
@@ -164,6 +150,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "工作日历",
           icon: "",
           isHide: false,
+          permission: true,
         },
       },
       {
@@ -175,6 +162,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "时间调整",
           icon: "",
           isHide: false,
+          permission: true,
         },
       },
       {
@@ -187,6 +175,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "医生管理",
           icon: "",
           isHide: false,
+          permission: true,
         },
         children: [
           {
@@ -198,6 +187,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
               title: "账号信息",
               icon: "",
               isHide: false,
+              permission: true,
             },
           },
         ],
@@ -212,6 +202,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "用户管理",
           icon: "",
           isHide: false,
+          permission: true,
         },
         children: [
           {
@@ -223,6 +214,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
               title: "账号信息",
               icon: "",
               isHide: false,
+              permission: true,
             },
           },
         ],
@@ -237,6 +229,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "基本管理",
           icon: "",
           isHide: false,
+          permission: true,
         },
         children: [
           {
@@ -248,6 +241,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
               title: "科室管理",
               icon: "",
               isHide: false,
+              permission: true,
             },
           },
           {
@@ -259,6 +253,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
               title: "公告管理",
               icon: "",
               isHide: false,
+              permission: true,
             },
           },
           {
@@ -270,6 +265,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
               title: "评价管理",
               icon: "",
               isHide: false,
+              permission: true,
             },
           },
         ],
@@ -297,5 +293,40 @@ export const staticRoutes: Array<RouteRecordRaw> = [
     meta: {
       title: "页面找不到",
     },
+  },
+  {
+    path: "/",
+    name: "Home",
+    component: () => import("@/views/Home.vue"),
+    meta: {
+      title: "首页",
+      roles: ["common", "admin", "doctor"],
+      icon: "",
+      isHide: true,
+    },
+    children: [
+      {
+        path: "/",
+        name: "Home",
+        component: () => import("@/views/Hospital/Index.vue"),
+        meta: {
+          title: "首页",
+          roles: ["common", "admin", "doctor"],
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/hospital/about",
+        name: "HospitalAbout",
+        component: () => import("@/views/Hospital/About.vue"),
+        meta: {
+          title: "医院简介",
+          roles: ["common", "admin", "doctor"],
+          icon: "",
+          isHide: true,
+        },
+      },
+    ],
   },
 ];

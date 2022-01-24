@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container">
+  <div>
     <section>
       <el-carousel height="630px">
         <el-carousel-item v-for="item in bannerList" :key="item">
@@ -72,15 +72,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import { computed, defineComponent, reactive, toRefs } from "vue";
 import NewsHeader from "@/components/News/NewsHeader.vue";
 import DoctorCard from "@/components/DoctorCard.vue";
-
 import NewsList from "@/components/News/NewsList.vue";
-
 export default defineComponent({
-  name: "UserHome",
-  components: { NewsList, NewsHeader, DoctorCard },
+  name: "Hospital",
+  components: {
+    NewsHeader,
+    DoctorCard,
+    NewsList,
+  },
   setup() {
     const state = reactive({
       bannerList: [
@@ -153,76 +155,72 @@ export default defineComponent({
       let dataKeys = Object.keys(state.newsData);
       return dataKeys[state.active];
     });
-    onMounted(() => {});
     return { ...toRefs(state), whichKey, getNewsIndex };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.home-container {
-  overflow-x: hidden;
-  .content {
-    width: 1200px;
-    margin: 0 auto;
-    .news-banner {
-      margin-right: 40px;
-      .news-banner-title {
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        z-index: 999;
-        background-color: rgba(0, 0, 0, 0.5);
-        height: 30px;
-        line-height: 30px;
-        width: 400px;
-        color: #fff;
-        vertical-align: middle;
-        padding: 0 5px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+.content {
+  width: 1200px;
+  margin: 0 auto;
+  .news-banner {
+    margin-right: 40px;
+    .news-banner-title {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 999;
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 30px;
+      line-height: 30px;
+      width: 400px;
+      color: #fff;
+      vertical-align: middle;
+      padding: 0 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .news-list {
-      flex: 1;
-      .news-list-content {
+  }
+  .news-list {
+    flex: 1;
+    .news-list-content {
+      margin-top: 10px;
+      .news-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 40px;
         margin-top: 10px;
-        .news-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          height: 40px;
-          margin-top: 10px;
-          .news-title {
-            font-size: 14px;
-            max-width: 680px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            cursor: pointer;
-            &:hover {
-              color: var(--el-color-primary);
-            }
-            em {
-              color: var(--el-color-primary);
-            }
+        .news-title {
+          font-size: 14px;
+          max-width: 680px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          cursor: pointer;
+          &:hover {
+            color: var(--el-color-primary);
           }
-          .news-date {
-            color: #999;
-            font-size: 12px;
+          em {
+            color: var(--el-color-primary);
           }
+        }
+        .news-date {
+          color: #999;
+          font-size: 12px;
         }
       }
     }
-    .news-home {
+  }
+  .news-home {
+    display: flex;
+  }
+  .doctor-team {
+    .doctor-list {
       display: flex;
-    }
-    .doctor-team {
-      .doctor-list {
-        display: flex;
-        justify-content: space-evenly;
-      }
+      justify-content: space-evenly;
     }
   }
 }
