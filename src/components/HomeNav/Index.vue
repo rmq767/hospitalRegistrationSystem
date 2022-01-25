@@ -135,8 +135,8 @@ export default defineComponent({
       position: absolute;
       left: 0;
       top: 50px;
-      z-index: 99;
       width: 100%;
+      z-index: 99;
       li {
         flex: 1;
         height: 50px;

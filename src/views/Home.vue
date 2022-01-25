@@ -42,7 +42,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .home-container {
-  overflow-x: hidden;
   .content {
     width: 1200px;
     margin: 0 auto;

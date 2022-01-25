@@ -47,24 +47,73 @@
       <section class="doctor-team">
         <NewsList :title="['专家团队']">
           <template #content>
-            <div class="doctor-list">
+            <swiper
+              :slides-per-view="5"
+              :slidesPerGroup="5"
+              :slidesPerGroupAuto="true"
+              :space-between="10"
+              :autoplay="{
+                delay: 6000,
+              }"
+              :loop="true"
+            >
+              <swiper-slide v-for="item in 15" :key="item">
+                <DoctorCard class="mt20"></DoctorCard>
+              </swiper-slide>
+            </swiper>
+            <!-- <div class="doctor-list">
               <DoctorCard
                 class="mt20"
                 v-for="item in 5"
                 :key="item"
               ></DoctorCard>
-            </div>
+            </div> -->
           </template>
         </NewsList>
       </section>
       <section class="department-list">
         <NewsList :title="['科室导航']">
-          <template #content> 123 </template>
+          <template #content>
+            <div class="department-info">
+              <img
+                src="https://www.pdfy999.com/Uploads/Picture/2019-01-08/5c3458a01ca6b.png"
+                alt=""
+                class="department-img"
+              />
+              <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
+                <el-tab-pane
+                  v-for="item in department"
+                  :key="item.name"
+                  :label="item.name"
+                  :name="item.name"
+                >
+                  <div class="department-content">
+                    <p v-for="(sub, index) in item.sub" :key="index">
+                      <el-icon><elementCaretRight /></el-icon
+                      ><span>{{ sub }}</span>
+                    </p>
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
+            </div>
+          </template>
         </NewsList>
       </section>
       <section class="hospital-show">
         <NewsList :title="['附院风采']">
-          <template #content> 321 </template>
+          <template #content>
+            <swiper
+              :slides-per-view="4"
+              :slidesPerGroupAuto="true"
+              :space-between="10"
+              :autoplay="true"
+              :loop="true"
+            >
+              <swiper-slide v-for="pic in culture" :key="pic">
+                <img class="culture-img" :src="pic" alt="" />
+              </swiper-slide>
+            </swiper>
+          </template>
         </NewsList>
       </section>
     </section>
@@ -76,12 +125,20 @@ import { computed, defineComponent, reactive, toRefs } from "vue";
 import NewsHeader from "@/components/News/NewsHeader.vue";
 import DoctorCard from "@/components/DoctorCard.vue";
 import NewsList from "@/components/News/NewsList.vue";
+import SwiperCore, { Autoplay } from "swiper";
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue/swiper-vue";
+// Import Swiper styles
+import "swiper/swiper.min.css";
+SwiperCore.use([Autoplay]);
 export default defineComponent({
   name: "Hospital",
   components: {
     NewsHeader,
     DoctorCard,
     NewsList,
+    Swiper,
+    SwiperSlide,
   },
   setup() {
     const state = reactive({
@@ -146,7 +203,90 @@ export default defineComponent({
           },
         ],
       },
+      department: [
+        {
+          name: "内科系统",
+          sub: [
+            "内分泌",
+            "风湿科",
+            "血液科",
+            "肾内科",
+            "重症医学科",
+            "儿科",
+            "心血管科",
+            "肿瘤科",
+          ],
+        },
+        {
+          name: "外科系统",
+          sub: [
+            "内分泌",
+            "风湿科",
+            "血液科",
+            "肾内科",
+            "重症医学科",
+            "儿科",
+            "心血管科",
+            "肿瘤科",
+          ],
+        },
+        {
+          name: "眼科医院",
+          sub: [
+            "内分泌",
+            "风湿科",
+            "血液科",
+            "肾内科",
+            "重症医学科",
+            "儿科",
+            "心血管科",
+            "肿瘤科",
+          ],
+        },
+        {
+          name: "骨科医院",
+          sub: [
+            "内分泌",
+            "风湿科",
+            "血液科",
+            "肾内科",
+            "重症医学科",
+            "儿科",
+            "心血管科",
+            "肿瘤科",
+          ],
+        },
+        {
+          name: "消化中心",
+          sub: [
+            "内分泌",
+            "风湿科",
+            "血液科",
+            "肾内科",
+            "重症医学科",
+            "儿科",
+            "心血管科",
+            "肿瘤科",
+          ],
+        },
+      ],
+      culture: [
+        "https://www.pdfy999.com/Uploads/Picture/2018-03-23/5ab464ccf0b77.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-03-23/5ab4648beca14.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-03-23/5ab46527a823a.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-03-23/5ab465485a83d.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-03-23/5ab465643b15e.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-03-23/5ab4651088805.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb2fb7d4d.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb3a48c0d.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb4a541e5.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb5fbd286.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb244c0c5.jpg",
+        "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb5597595.jpg",
+        "",
+      ],
       active: 0,
+      activeName: "内科系统",
     });
     const getNewsIndex = (index: number) => {
       state.active = index;
@@ -221,6 +361,38 @@ export default defineComponent({
     .doctor-list {
       display: flex;
       justify-content: space-evenly;
+    }
+  }
+  .department-list {
+    .department-info {
+      margin-top: 20px;
+      display: flex;
+      .department-img {
+        margin-right: 20px;
+      }
+    }
+    .department-content {
+      display: flex;
+      flex-wrap: wrap;
+      > p {
+        flex-basis: 20%;
+        font-size: 18px;
+        cursor: pointer;
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        &:hover {
+          color: var(--el-color-primary);
+        }
+      }
+    }
+  }
+  .hospital-show {
+    .culture-img {
+      width: 280px;
+      height: 220px;
+      object-fit: cover;
+      margin: 10px;
     }
   }
 }
