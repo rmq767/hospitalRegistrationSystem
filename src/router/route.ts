@@ -327,6 +327,17 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           isHide: true,
         },
       },
+      {
+        path: "/hospital/culture",
+        name: "HospitalCulture",
+        component: () => import("@/views/Hospital/Culture.vue"),
+        meta: {
+          title: "附院文化",
+          roles: ["common", "admin", "doctor"],
+          icon: "",
+          isHide: true,
+        },
+      },
     ],
   },
 ];

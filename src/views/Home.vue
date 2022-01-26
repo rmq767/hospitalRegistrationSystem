@@ -15,7 +15,11 @@
       <section class="home-menu">
         <HomeNav></HomeNav>
       </section>
-      <router-view></router-view>
+      <div class="home-main">
+        <section class="home-container">
+          <router-view></router-view>
+        </section>
+      </div>
     </div>
   </el-scrollbar>
 </template>
@@ -41,6 +45,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.home-main {
+  background-color: var(--el-color-info-light-9);
+  min-height: calc(100vh - 170px);
+  .home-container {
+    width: 1200px;
+    margin: 0 auto;
+    background-color: var(--el-color-whites);
+    height: 100%;
+  }
+}
 .home-container {
   .content {
     width: 1200px;
