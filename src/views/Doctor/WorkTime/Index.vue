@@ -60,7 +60,7 @@ export default defineComponent({
 .highlight {
   margin: 5px;
 }
-::v-deep .el-calendar-table .el-calendar-day {
+:deep(.el-calendar-table .el-calendar-day) {
   height: 120px;
 }
 </style>

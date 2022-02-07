@@ -16,7 +16,10 @@
         <HomeNav></HomeNav>
       </section>
       <div class="home-main">
-        <section class="home-container">
+        <section class="home-container" v-if="notHomePage">
+          <router-view></router-view>
+        </section>
+        <section v-else>
           <router-view></router-view>
         </section>
       </div>
@@ -25,21 +28,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import HomeNav from "@/components/HomeNav/Index.vue";
 
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   name: "UserHome",
   components: { HomeNav },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const toLogin = () => {
       router.push("/login");
     };
+    const notHomePage = computed(() => {
+      return route.path !== "/";
+    });
     onMounted(() => {});
-    return { toLogin };
+    return { toLogin, notHomePage };
   },
 });
 </script>

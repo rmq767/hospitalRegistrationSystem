@@ -388,7 +388,7 @@ export default defineComponent({
   }
   .home-warning-card {
     height: 292px;
-    ::v-deep(.el-card) {
+    :deep(.el-card) {
       height: 100%;
     }
   }

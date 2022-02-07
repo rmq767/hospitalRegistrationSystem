@@ -338,6 +338,50 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           isHide: true,
         },
       },
+      {
+        path: "/hospital/news",
+        name: "HospitalNews",
+        component: () => import("@/views/Hospital/News/NewsList.vue"),
+        meta: {
+          title: "附院要闻",
+          roles: ["common", "admin", "doctor"],
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/hospital/news/:id",
+        name: "HospitalNewsDetail",
+        component: () => import("@/views/Hospital/News/NewsDetail.vue"),
+        meta: {
+          title: "新闻详情",
+          roles: ["common", "admin", "doctor"],
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/hospital/notice",
+        name: "HospitalNotice",
+        component: () => import("@/views/Hospital/Notice/NoticeList.vue"),
+        meta: {
+          title: "附院公告",
+          roles: ["common", "admin", "doctor"],
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/hospital/notice/:id",
+        name: "HospitalNoticeDetail",
+        component: () => import("@/views/Hospital/Notice/NoticeDetail.vue"),
+        meta: {
+          title: "公告详情",
+          roles: ["common", "admin", "doctor"],
+          icon: "",
+          isHide: true,
+        },
+      },
     ],
   },
 ];
