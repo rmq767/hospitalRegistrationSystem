@@ -80,7 +80,7 @@
                 alt=""
                 class="department-img"
               />
-              <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
+              <el-tabs v-model="activeName" stretch>
                 <el-tab-pane
                   v-for="item in department"
                   :key="item.name"

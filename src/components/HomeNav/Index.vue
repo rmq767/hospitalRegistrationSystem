@@ -67,6 +67,12 @@ export default defineComponent({
           ],
         },
         {
+          name: "科室及医生",
+          isSubShow: false,
+          path: "/hospital/departmentdoctor",
+          subItems: [],
+        },
+        {
           name: "患者服务",
           isSubShow: false,
           subItems: [

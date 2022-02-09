@@ -2,7 +2,7 @@
   <div class="news-container" :style="{ width }">
     <NewsHeader :title="title" @getIndex="getIndex">
       <template #more>
-        <span class="more">更多&gt;&gt;</span>
+        <span class="more" @click="toPage">更多&gt;&gt;</span>
       </template>
     </NewsHeader>
     <slot name="content"></slot>
@@ -10,8 +10,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import { computed, defineComponent, reactive, ref, toRefs } from "vue";
 import NewsHeader from "@/components/News/NewsHeader.vue";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "NewsList",
   components: {
@@ -32,10 +33,35 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const tabIndex = ref(0);
+    const router = useRouter();
     const getIndex = (index: number) => {
       emit("getIndex", index);
+      tabIndex.value = index;
     };
-    return { getIndex };
+    const toPage = () => {
+      let tab = props.title[tabIndex.value];
+      let path = "";
+      switch (tab) {
+        case "医院公告":
+          path = "/hospital/notice";
+          break;
+        case "医院新闻":
+          path = "/hospital/news";
+          break;
+        case "专家团队":
+          path = "/hospital/departmentdoctor";
+          break;
+        case "科室导航":
+          path = "/hospital/departmentdoctor";
+          break;
+        case "附院风采":
+          path = "/hospital/culture";
+          break;
+      }
+      router.push(path);
+    };
+    return { getIndex, toPage };
   },
 });
 </script>
