@@ -57,7 +57,7 @@ export default defineComponent({
     });
     const router = useRouter();
     const toDoctorInfo = (row: DoctorInterface) => {
-      router.push({ name: "DoctorInfo", params: { id: row.name } });
+      router.push({ name: "HospitalDoctorInfo", params: { id: row.name } });
     };
     return { ...toRefs(state), toDoctorInfo };
   },

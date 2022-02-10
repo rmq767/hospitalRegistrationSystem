@@ -13,7 +13,7 @@
       </p>
       <p class="rank">博士研究生 检验科</p>
       <div class="handle">
-        <el-button type="primary" size="mini">详情</el-button>
+        <el-button type="primary" size="mini" @click="toPage">详情</el-button>
         <el-button type="warning" size="mini">预约</el-button>
       </div>
     </div>
@@ -22,10 +22,15 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "DoctorCard",
   setup() {
-    return {};
+    const router = useRouter();
+    const toPage = () => {
+      router.push(`/hospital/doctor/info/${1}`);
+    };
+    return { toPage };
   },
 });
 </script>

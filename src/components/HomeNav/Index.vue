@@ -82,7 +82,7 @@ export default defineComponent({
             },
             {
               name: "预约挂号",
-              path: "/hospital/registration",
+              path: "/doctor/search",
             },
             {
               name: "就诊流程",

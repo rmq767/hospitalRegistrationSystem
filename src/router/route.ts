@@ -85,34 +85,11 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/doctor/search",
-        name: "DoctorSearch",
-        component: () => import("@/views/Doctor/Filter/Index.vue"),
-        meta: {
-          roles: ["common"],
-          title: "医生搜索",
-          icon: "",
-          isHide: false,
-        },
-      },
-      {
-        path: "/doctor/registration/:id",
-        name: "DoctorRegistration",
-        component: () =>
-          import("@/views/Doctor/Filter/DoctorRegistrationForm.vue"),
-        meta: {
-          roles: ["common"],
-          title: "挂号医生",
-          icon: "",
-          isHide: true,
-        },
-      },
-      {
         path: "/doctor/info/:id",
         name: "DoctorInfo",
         component: () => import("@/views/Doctor/Info/Index.vue"),
         meta: {
-          roles: ["common", "doctor"],
+          roles: ["doctor"],
           title: "医生详情",
           icon: "",
           isHide: true,
@@ -391,6 +368,39 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+        },
+      },
+      {
+        path: "/hospital/doctor/info/:id",
+        name: "HospitalDoctorInfo",
+        component: () => import("@/views/Doctor/Info/Index.vue"),
+        meta: {
+          roles: ["common", "doctor", "admin"],
+          title: "医生详情",
+          icon: "",
+          isHide: true,
+        },
+      },
+      {
+        path: "/user/registration",
+        name: "Registration",
+        component: () => import("@/views/User/Registration/Index.vue"),
+        meta: {
+          roles: ["common"],
+          title: "我要挂号",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/doctor/search",
+        name: "DoctorSearch",
+        component: () => import("@/views/Doctor/Filter/Index.vue"),
+        meta: {
+          roles: ["common"],
+          title: "医生搜索/预约挂号",
+          icon: "",
+          isHide: false,
         },
       },
     ],
