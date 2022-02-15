@@ -3,7 +3,7 @@
     <el-card class="mb20">
       <el-form :model="filterForm" label-width="100px" :inline="true">
         <el-form-item label="医生姓名：">
-          <el-input v-model="filterForm.name"></el-input>
+          <el-input v-model="filterForm.username"></el-input>
         </el-form-item>
         <el-form-item label="科室：">
           <el-select v-model="filterForm.department" clearable filterable>
@@ -65,10 +65,12 @@ import {
   defineComponent,
   getCurrentInstance,
   nextTick,
+  onMounted,
   reactive,
   toRefs,
 } from "vue";
 import DoctorInfoDialog from "./components/DoctorInfo.vue";
+import api from "@/api/index";
 export default defineComponent({
   name: "AdminDoctorManage",
   components: {
@@ -77,17 +79,18 @@ export default defineComponent({
   setup() {
     const state = reactive({
       filterForm: {
-        name: "",
+        username: "",
         department: "",
       },
       departmentOptions: ["儿科"],
       doctorTable: [
         {
-          name: "李淳罡",
+          username: "李淳罡",
           account: "123",
           age: 31,
           department: "儿科",
           type: "专家",
+          avatar: "",
         },
       ],
       pageInfo: {
@@ -120,6 +123,14 @@ export default defineComponent({
       doctorInfo: null,
       doctorDialogEl: ElDialog,
     });
+    const getDoctorList = async () => {
+      const params = {
+        ...state.filterForm,
+        ...state.pageInfo,
+      };
+      const response = await api.doctor.apiGetDoctorList(params);
+      console.log(response);
+    };
     const onSubmit = () => {
       console.log(state.filterForm);
     };
@@ -140,6 +151,9 @@ export default defineComponent({
       state.pageInfo.pageSize = pageSize;
       state.pageInfo.currentPage = 1;
     };
+    onMounted(() => {
+      // getDoctorList();
+    });
     return {
       ...toRefs(state),
       onSubmit,

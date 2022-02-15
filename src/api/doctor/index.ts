@@ -1,0 +1,52 @@
+import request from "../http";
+
+export default {
+  /**
+   * @description 获取医生分页列表
+   * @param {object} data
+   * @return {*}
+   */
+  apiGetDoctorList(data: object) {
+    return request({
+      url: "/doctor/getDoctorPage",
+      method: "post",
+      data,
+    });
+  },
+  /**
+   * @description 添加医生
+   * @param {object} data
+   * @return {*}
+   */
+  apiAddDoctor(data: object) {
+    return request({
+      url: "/doctor/addDoctor",
+      method: "post",
+      data,
+    });
+  },
+  /**
+   * @description 修改医生
+   * @param {object} data
+   * @param {number} id
+   * @return {*}
+   */
+  apiEditDoctor(data: object, id: number) {
+    return request({
+      url: `/doctor/updateDoctor/${id}`,
+      method: "put",
+      data,
+    });
+  },
+  /**
+   * @description 删除医生
+   * @param {number} id
+   * @return {*}
+   */
+  apiDeleteDoctor(id: number) {
+    return request({
+      url: `/doctor/deleteDoctor/${id}`,
+      method: "delete",
+    });
+  },
+};

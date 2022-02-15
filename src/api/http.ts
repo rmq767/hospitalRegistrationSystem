@@ -3,11 +3,8 @@ import axios, { AxiosRequestConfig } from "axios";
 import { ElLoading, ElMessage } from "element-plus";
 //创建axios的一个实例
 var instance = axios.create({
-  baseURL: "http://localhost:8080", //接口统一域名
+  baseURL: "http://192.168.101.13:10001/api", //接口统一域名
   timeout: 6000, //设置超时
-  headers: {
-    "Content-Type": "application/json;charset=UTF-8;",
-  },
 });
 let loading: any;
 //正在请求的数量
