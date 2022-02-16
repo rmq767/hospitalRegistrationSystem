@@ -52,28 +52,6 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/user/registration/:id",
-        name: "UserRegistration",
-        component: () => import("@/views/User/Info/UserRegistration.vue"),
-        meta: {
-          roles: ["common"],
-          title: "我的挂号",
-          icon: "",
-          isHide: false,
-        },
-      },
-      {
-        path: "/user/registration",
-        name: "Registration",
-        component: () => import("@/views/User/Registration/Index.vue"),
-        meta: {
-          roles: ["common"],
-          title: "我要挂号",
-          icon: "",
-          isHide: false,
-        },
-      },
-      {
         path: "/user/information/:id",
         name: "UserInfo",
         component: () => import("@/views/User/Info/UserInfo.vue"),
@@ -95,17 +73,6 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           isHide: true,
         },
       },
-      // {
-      //   path: "/evaluation/:id",
-      //   name: "Evaluation",
-      //   component: () => import("@/views/User/Evaluation/Index.vue"),
-      //   meta: {
-      //     roles: ["common"],
-      //     title: "用户评价",
-      //     icon: "",
-      //     isHide: false,
-      //   },
-      // },
       {
         path: "/doctor/worktime/info",
         name: "WorkTimeInfo",
@@ -399,6 +366,17 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         meta: {
           roles: ["common"],
           title: "医生搜索/预约挂号",
+          icon: "",
+          isHide: false,
+        },
+      },
+      {
+        path: "/user/registration/:id",
+        name: "UserRegistration",
+        component: () => import("@/views/User/Info/UserRegistration.vue"),
+        meta: {
+          roles: ["common"],
+          title: "我的挂号",
           icon: "",
           isHide: false,
         },

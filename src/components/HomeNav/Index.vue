@@ -85,8 +85,8 @@ export default defineComponent({
               path: "/doctor/search",
             },
             {
-              name: "就诊流程",
-              path: "/hospital/process",
+              name: "我的挂号",
+              path: "/user/registration/:id",
             },
           ],
         },

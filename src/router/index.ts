@@ -208,6 +208,8 @@ router.beforeEach(async (to, from, next) => {
     } else if (token && to.path === "/login") {
       if (role === "admin" || role === "doctor") {
         next("/adminhome");
+      } else {
+        next("/");
       }
       NProgress.done();
     } else {

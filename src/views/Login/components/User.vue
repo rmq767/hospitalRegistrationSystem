@@ -92,8 +92,9 @@ export default defineComponent({
       },
     });
     const onSignIn = async () => {
-      let role = ["doctor", "admin"];
-      if (role.includes(state.ruleForm.userName)) {
+      let admin = ["doctor", "admin"];
+      let user = ["common"];
+      if (admin.includes(state.ruleForm.userName)) {
         let info = {
           roles: [state.ruleForm.userName],
         };
@@ -104,6 +105,15 @@ export default defineComponent({
          */
         await initFrontEndControlRoutes();
         router.push("/adminhome");
+        ElMessage.success("登录成功！");
+      } else if (user.includes(state.ruleForm.userName)) {
+        console.log(1);
+        let info = {
+          roles: [state.ruleForm.userName],
+        };
+        Session.set("token", "token");
+        Session.set("userInfo", info);
+        router.go(-1);
         ElMessage.success("登录成功！");
       } else {
         ElMessage.error("账号不存在");
