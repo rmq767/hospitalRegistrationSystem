@@ -48,7 +48,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "修改密码",
           icon: "",
           isHide: true,
-          permission: true,
+          permission: false,
         },
       },
       {
@@ -60,6 +60,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "用户信息",
           icon: "",
           isHide: true,
+          permission: true,
         },
       },
       {
@@ -71,6 +72,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           title: "医生详情",
           icon: "",
           isHide: true,
+          permission: true,
         },
       },
       {
@@ -228,6 +230,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/views/Login/Index.vue"),
     meta: {
       title: "登录",
+      permission: false,
     },
   },
   {
@@ -236,17 +239,20 @@ export const staticRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/views/404.vue"),
     meta: {
       title: "页面找不到",
+      permission: false,
     },
   },
   {
-    path: "/",
+    path: "/home",
     name: "Home",
+    redirect: "/",
     component: () => import("@/views/Home.vue"),
     meta: {
       title: "首页",
       roles: ["common", "admin", "doctor"],
       icon: "",
       isHide: true,
+      permission: false,
     },
     children: [
       {
@@ -258,6 +264,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -269,6 +276,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -280,6 +288,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -291,6 +300,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -302,6 +312,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -313,6 +324,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -324,6 +336,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -335,6 +348,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           roles: ["common", "admin", "doctor"],
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -346,6 +360,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           title: "医生详情",
           icon: "",
           isHide: true,
+          permission: false,
         },
       },
       {
@@ -357,6 +372,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           title: "我要挂号",
           icon: "",
           isHide: false,
+          permission: false,
         },
       },
       {
@@ -368,6 +384,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           title: "医生搜索/预约挂号",
           icon: "",
           isHide: false,
+          permission: false,
         },
       },
       {
@@ -379,6 +396,19 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           title: "我的挂号",
           icon: "",
           isHide: false,
+          permission: false,
+        },
+      },
+      {
+        path: "/user/changepassword",
+        name: "UserChangePassword",
+        component: () => import("@/views/ChangePassword.vue"),
+        meta: {
+          roles: ["common"],
+          title: "修改密码",
+          icon: "",
+          isHide: true,
+          permission: false,
         },
       },
     ],

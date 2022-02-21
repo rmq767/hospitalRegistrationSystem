@@ -96,7 +96,4 @@ export default defineComponent({
   background-color: var(--el-color-primary);
   color: #fff;
 }
-::v-deep .el-table th.el-table__cell {
-  background-color: var(--el-color-primary);
-}
 </style>

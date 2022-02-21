@@ -88,6 +88,10 @@ export default defineComponent({
               name: "我的挂号",
               path: "/user/registration/:id",
             },
+            {
+              name: "修改密码",
+              path: "/user/changepassword",
+            },
           ],
         },
       ],

@@ -196,11 +196,9 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.title) NProgress.start();
   const token = Session.get("token");
   const role = Session.get("userInfo") && Session.get("userInfo").roles[0];
-  if (to.path === "/login" && (!token || !role)) {
-    next();
-    NProgress.done();
-  } else {
-    if ((!token || !role) && to.meta.permission) {
+  const permission = to.meta.permission;
+  if (permission) {
+    if (!token || !role) {
       next("/login");
       Session.clear();
       resetRoute();
@@ -213,18 +211,16 @@ router.beforeEach(async (to, from, next) => {
       }
       NProgress.done();
     } else {
-      // if (store.state.routesList.routesList.length === 0) {
-      // 	if (isRequestRoutes) {
-      // 		// 后端控制路由：路由数据初始化，防止刷新时丢失
-      // 		await initBackEndControlRoutes();
-      // 		// 动态添加路由：防止非首页刷新时跳转回首页的问题
-      // 		// 确保 addRoute() 时动态添加的路由已经被完全加载上去
-      // 		next({ ...to, replace: true });
-      // 	}
-      // } else {
-      // 	next();
-      // }
       next();
+      NProgress.done();
+    }
+  } else {
+    if (permission === undefined) {
+      next("/login");
+      NProgress.done();
+    } else {
+      next();
+      NProgress.done();
     }
   }
 });

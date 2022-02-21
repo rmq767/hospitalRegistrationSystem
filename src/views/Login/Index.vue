@@ -16,6 +16,7 @@
         <div class="other" @click="toRegister">
           {{ isRegister ? "返回登录" : "我要注册" }}
         </div>
+        <div class="to-home" @click="toHome">&lt; 返回首页</div>
       </div>
     </div>
   </div>
@@ -23,6 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
 import User from "./components/User.vue";
 import UserRegister from "./components/UserRegister.vue";
 export default defineComponent({
@@ -33,13 +35,17 @@ export default defineComponent({
   },
   setup() {
     const isRegister = ref(false);
+    const router = useRouter();
     /**
      * @description 切换注册登录
      */
     const toRegister = () => {
       isRegister.value = !isRegister.value;
     };
-    return { toRegister, isRegister };
+    const toHome = () => {
+      router.push("/");
+    };
+    return { toRegister, isRegister, toHome };
   },
 });
 </script>
@@ -122,6 +128,15 @@ export default defineComponent({
     .other {
       position: absolute;
       right: 15px;
+      bottom: 10px;
+      &:hover {
+        cursor: pointer;
+        color: var(--el-color-primary);
+      }
+    }
+    .to-home {
+      position: absolute;
+      left: 8px;
       bottom: 10px;
       &:hover {
         cursor: pointer;

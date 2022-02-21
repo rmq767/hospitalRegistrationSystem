@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLogin">
     <el-form :model="form" ref="formEl" :rules="rules" label-width="120px">
       <el-form-item label="旧密码：" prop="oldPassword">
         <el-input
@@ -28,15 +28,24 @@
       </el-form-item>
     </el-form>
   </div>
+  <el-result icon="warning" title="您未登录" sub-title="请先登录查看" v-else>
+    <template #extra>
+      <el-button type="primary" @click="toPage">去登录</el-button>
+    </template>
+  </el-result>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs } from "vue";
+import { computed, defineComponent, reactive, ref, toRefs } from "vue";
 import { isPassword } from "@/utils/validate";
+import { Session } from "@/utils/session";
 import { ElForm } from "element-plus";
+import { useRoute, useRouter } from "vue-router";
 export default defineComponent({
   name: "ChangePassword",
   setup() {
+    const router = useRouter();
+    const route = useRoute();
     const formEl = ref<InstanceType<typeof ElForm>>();
     const state = reactive({
       form: {
@@ -104,7 +113,35 @@ export default defineComponent({
       if (!formEl) return;
       formEl.resetFields();
     };
-    return { ...toRefs(state), rules, formEl, onSubmit, resetForm };
+    const isLogin = computed(() => {
+      const userInfo = Session.get("userInfo");
+      const path = route.path;
+      if (
+        (userInfo.roles[0] === "doctor" || userInfo.roles[0] === "admin") &&
+        path === "/changepassword"
+      ) {
+        return true;
+      } else if (
+        userInfo.roles[0] === "common" &&
+        path === "/user/changepassword"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    const toPage = () => {
+      router.push("/login");
+    };
+    return {
+      ...toRefs(state),
+      rules,
+      formEl,
+      onSubmit,
+      resetForm,
+      isLogin,
+      toPage,
+    };
   },
 });
 </script>

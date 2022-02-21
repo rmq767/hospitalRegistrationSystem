@@ -107,13 +107,12 @@ export default defineComponent({
         router.push("/adminhome");
         ElMessage.success("登录成功！");
       } else if (user.includes(state.ruleForm.userName)) {
-        console.log(1);
         let info = {
           roles: [state.ruleForm.userName],
         };
         Session.set("token", "token");
         Session.set("userInfo", info);
-        router.go(-1);
+        router.push("/");
         ElMessage.success("登录成功！");
       } else {
         ElMessage.error("账号不存在");
