@@ -4,7 +4,7 @@
       <el-input
         type="text"
         placeholder="common/doctor/admin"
-        v-model="ruleForm.userName"
+        v-model="ruleForm.username"
         clearable
         autocomplete="off"
       >
@@ -25,7 +25,7 @@
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item>
+    <!-- <el-form-item>
       <el-row :gutter="15">
         <el-col :span="16">
           <el-input
@@ -47,7 +47,7 @@
           </div>
         </el-col>
       </el-row>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item>
       <el-button
         type="primary"
@@ -67,14 +67,15 @@ import { Session } from "@/utils/session";
 import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import VerifyCode from "@/components/VerifyCode.vue";
+// import VerifyCode from "@/components/VerifyCode.vue";
 import { ElMessage } from "element-plus";
 import { initFrontEndControlRoutes } from "@/router/frond";
+import api from "@/api/index";
 export default defineComponent({
   name: "LoginUser",
-  components: {
-    VerifyCode,
-  },
+  // components: {
+  //   VerifyCode,
+  // },
   setup() {
     const { proxy } = getCurrentInstance() as any;
     const store = useStore();
@@ -83,40 +84,41 @@ export default defineComponent({
     const state = reactive({
       isShowPassword: false,
       ruleForm: {
-        userName: "admin",
+        username: "system",
         password: "123456",
-        code: "7895",
       },
       loading: {
         signIn: false,
       },
     });
     const onSignIn = async () => {
-      let admin = ["doctor", "admin"];
-      let user = ["common"];
-      if (admin.includes(state.ruleForm.userName)) {
-        let info = {
-          roles: [state.ruleForm.userName],
-        };
-        Session.set("token", "token");
-        Session.set("userInfo", info);
-        /**
-         * @description 添加动态路由
-         */
-        await initFrontEndControlRoutes();
-        router.push("/adminhome");
-        ElMessage.success("登录成功！");
-      } else if (user.includes(state.ruleForm.userName)) {
-        let info = {
-          roles: [state.ruleForm.userName],
-        };
-        Session.set("token", "token");
-        Session.set("userInfo", info);
-        router.push("/");
-        ElMessage.success("登录成功！");
-      } else {
-        ElMessage.error("账号不存在");
-      }
+      const response = await api.login.apiAdminLogin(state.ruleForm);
+      console.log(response);
+      // let admin = ["doctor", "admin"];
+      // let user = ["common"];
+      // if (admin.includes(state.ruleForm.userName)) {
+      //   let info = {
+      //     roles: [state.ruleForm.userName],
+      //   };
+      //   Session.set("token", "token");
+      //   Session.set("userInfo", info);
+      //   /**
+      //    * @description 添加动态路由
+      //    */
+      //   await initFrontEndControlRoutes();
+      //   router.push("/adminhome");
+      //   ElMessage.success("登录成功！");
+      // } else if (user.includes(state.ruleForm.userName)) {
+      //   let info = {
+      //     roles: [state.ruleForm.userName],
+      //   };
+      //   Session.set("token", "token");
+      //   Session.set("userInfo", info);
+      //   router.push("/");
+      //   ElMessage.success("登录成功！");
+      // } else {
+      //   ElMessage.error("账号不存在");
+      // }
     };
     return { ...toRefs(state), onSignIn };
   },

@@ -53,7 +53,7 @@
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item prop="code">
+    <!-- <el-form-item prop="code">
       <el-row :gutter="15">
         <el-col :span="16">
           <el-input
@@ -75,7 +75,7 @@
           </div>
         </el-col>
       </el-row>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item>
       <el-button
         type="primary"
@@ -84,7 +84,7 @@
         @click="onSignIn"
         :loading="loading.signIn"
       >
-        <span>登 录</span>
+        <span>注 册</span>
       </el-button>
     </el-form-item>
   </el-form>
@@ -95,12 +95,12 @@ import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { userRegisterForm } from "../../../utils/rules/formRulesRegister";
-import VerifyCode from "@/components/VerifyCode.vue";
+// import VerifyCode from "@/components/VerifyCode.vue";
 export default defineComponent({
   name: "LoginUserRegister",
-  components: {
-    VerifyCode,
-  },
+  // components: {
+  //   VerifyCode,
+  // },
   setup() {
     const { proxy } = getCurrentInstance() as any;
     const store = useStore();
@@ -115,7 +115,7 @@ export default defineComponent({
         phone: "",
         password: "",
         passwordAgain: "",
-        code: "5642",
+        // code: "5642",
       },
       loading: {
         signIn: false,

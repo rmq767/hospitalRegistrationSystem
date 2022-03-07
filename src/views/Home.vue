@@ -9,7 +9,8 @@
           />
         </div>
         <div class="handle">
-          <el-button type="text" @click="toLogin">登录</el-button>
+          <span v-if="isLogin">{{ userName }}</span>
+          <el-button v-else type="text" @click="toLogin">登录</el-button>
         </div>
       </header>
       <section class="home-menu">
@@ -28,9 +29,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import HomeNav from "@/components/HomeNav/Index.vue";
-
+import { Session } from "@/utils/session";
 import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
@@ -39,14 +40,24 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
+    const userName = ref("");
     const toLogin = () => {
       router.push("/login");
     };
     const notHomePage = computed(() => {
       return route.path !== "/";
     });
+    const isLogin = computed(() => {
+      const userInfo = Session.get("userInfo");
+      if (userInfo && userInfo.roles[0]) {
+        userName.value = userInfo.roles[0];
+        return true;
+      } else {
+        return false;
+      }
+    });
     onMounted(() => {});
-    return { toLogin, notHomePage };
+    return { toLogin, notHomePage, isLogin, userName };
   },
 });
 </script>

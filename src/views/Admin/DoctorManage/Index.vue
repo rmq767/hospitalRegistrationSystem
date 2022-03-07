@@ -152,7 +152,7 @@ export default defineComponent({
       state.pageInfo.currentPage = 1;
     };
     onMounted(() => {
-      // getDoctorList();
+      getDoctorList();
     });
     return {
       ...toRefs(state),
