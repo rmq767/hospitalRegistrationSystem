@@ -26,9 +26,8 @@ const pathMatch = {
  * @param route 当前循环时的路由项
  * @returns 返回对比后有权限的路由项
  */
-export function hasRoles(roles: any, route: any) {
-  if (route.meta && route.meta.roles)
-    return roles.some((role: any) => route.meta.roles.includes(role));
+export function hasRoles(role: any, route: any) {
+  if (route.meta && route.meta.roles) return route.meta.roles.includes(role);
   else return true;
 }
 
@@ -133,9 +132,12 @@ export function setFilterRoute(chil: any) {
   chil.forEach((route: any) => {
     if (route.meta.roles) {
       route.meta.roles.forEach((metaRoles: any) => {
-        store.state.userInfos.roles.forEach((roles: any) => {
-          if (metaRoles === roles) filterRoute.push({ ...route });
-        });
+        const role = store.state.userInfos.roles;
+        if (metaRoles === role) filterRoute.push({ ...route });
+        // console.log(store.state.userInfos);
+        // store.state.userInfos.roles.forEach((roles: any) => {
+        //   if (metaRoles === roles) filterRoute.push({ ...route });
+        // });
       });
     }
   });

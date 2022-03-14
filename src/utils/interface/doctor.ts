@@ -9,3 +9,7 @@ export interface DoctorInterface {
   age?: number;
   account?: number | string;
 }
+
+export interface DoctorManage {
+  avatar: string;
+}

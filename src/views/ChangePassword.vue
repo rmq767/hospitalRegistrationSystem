@@ -117,12 +117,14 @@ export default defineComponent({
       const userInfo = Session.get("userInfo");
       const path = route.path;
       if (
-        (userInfo.roles[0] === "doctor" || userInfo.roles[0] === "admin") &&
+        userInfo &&
+        (userInfo.roles === "doctor" || userInfo.roles === "admin") &&
         path === "/changepassword"
       ) {
         return true;
       } else if (
-        userInfo.roles[0] === "common" &&
+        userInfo &&
+        userInfo.roles === "user" &&
         path === "/user/changepassword"
       ) {
         return true;

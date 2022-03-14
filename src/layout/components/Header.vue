@@ -7,7 +7,7 @@
           mode="horizontal"
           width="100%"
           style="box-shadow: none"
-          v-if="isCommon"
+          v-if="isUser"
         ></Aside>
       </div>
       <div class="user">
@@ -60,8 +60,8 @@ export default defineComponent({
           break;
       }
     };
-    const isCommon = computed(() => {
-      return Session.get("userInfo").roles[0] === "common";
+    const isUser = computed(() => {
+      return Session.get("userInfo").roles === "user";
     });
     /**
      * @description 跳转个人信息
@@ -71,7 +71,7 @@ export default defineComponent({
       const id = "123";
       let routerName = "";
       switch (role) {
-        case "common":
+        case "user":
           routerName = "UserInfo";
           break;
         case "doctor":
@@ -104,7 +104,7 @@ export default defineComponent({
         })
         .catch(() => {});
     };
-    return { chooseMenu, isCommon };
+    return { chooseMenu, isUser };
   },
 });
 </script>

@@ -1,17 +1,17 @@
 <template>
   <div class="filter">
     <el-card>
-      <el-form :inline="true" :model="state">
+      <el-form :inline="true">
         <el-form-item label="医生名称：">
           <el-input
-            v-model="state.doctorName"
+            v-model="filter.doctor"
             placeholder="请输入医生名称"
           ></el-input>
         </el-form-item>
         <el-form-item label="科室：">
-          <el-select v-model="state.department" placeholder="请选择科室">
+          <el-select v-model="filter.department" placeholder="请选择科室">
             <el-option
-              v-for="department in state.departmentOptions"
+              v-for="department in departmentOptions"
               :key="department"
               :label="department"
               :value="department"
@@ -27,15 +27,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "DoctorFilter",
-  emits: ["change"],
-  setup() {
-    const { emit } = getCurrentInstance() as any;
+  emits: ["filter"],
+  setup(props, { emit }) {
     const state = reactive({
-      doctorName: "",
-      department: "",
+      filter: {
+        doctor: "",
+        department: "",
+      },
       departmentOptions: [
         "儿科门诊",
         "儿童消化心血管科",
@@ -59,12 +60,9 @@ export default defineComponent({
       ],
     });
     const onSubmit = () => {
-      emit("change", {
-        doctorName: state.doctorName,
-        department: state.department,
-      });
+      emit("filter", state.filter);
     };
-    return { state, onSubmit };
+    return { ...toRefs(state), onSubmit };
   },
 });
 </script>

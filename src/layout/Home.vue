@@ -2,7 +2,7 @@
   <el-container class="layout-container">
     <Header />
     <el-container class="layout-backtop">
-      <Aside v-if="!isCommon" />
+      <Aside v-if="!isUser" />
       <Main />
     </el-container>
     <el-backtop target=".layout-backtop .el-scrollbar__wrap"></el-backtop>
@@ -23,10 +23,10 @@ export default defineComponent({
     Main,
   },
   setup() {
-    const isCommon = computed(() => {
-      return Session.get("userInfo").roles[0] === "common";
+    const isUser = computed(() => {
+      return Session.get("userInfo").roles === "user";
     });
-    return { isCommon };
+    return { isUser };
   },
 });
 </script>

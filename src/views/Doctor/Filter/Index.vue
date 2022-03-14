@@ -1,6 +1,6 @@
 <template>
   <div class="doctor">
-    <DoctorFilter></DoctorFilter>
+    <DoctorFilter @filter="filterDoctor"></DoctorFilter>
     <DoctorList></DoctorList>
     <Pagination
       :currentPage="pageInfo.currentPage"
@@ -31,6 +31,7 @@ export default defineComponent({
         pageSize: 10,
         total: 0,
       },
+      filter: {},
     });
     /**
      * @description 分页-每页条数
@@ -44,7 +45,15 @@ export default defineComponent({
     const handleCurrentChange = (page: number) => {
       console.log(page);
     };
-    return { ...toRefs(state), handleSizeChange, handleCurrentChange };
+    const filterDoctor = (data: any) => {
+      state.filter = data;
+    };
+    return {
+      ...toRefs(state),
+      handleSizeChange,
+      handleCurrentChange,
+      filterDoctor,
+    };
   },
 });
 </script>

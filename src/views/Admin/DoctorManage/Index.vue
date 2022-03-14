@@ -3,7 +3,7 @@
     <el-card class="mb20">
       <el-form :model="filterForm" label-width="100px" :inline="true">
         <el-form-item label="医生姓名：">
-          <el-input v-model="filterForm.username"></el-input>
+          <el-input v-model="filterForm.doctor"></el-input>
         </el-form-item>
         <el-form-item label="科室：">
           <el-select v-model="filterForm.department" clearable filterable>
@@ -60,17 +60,16 @@
 </template>
 
 <script lang="ts">
-import { ElDialog } from "element-plus";
-import {
-  defineComponent,
-  getCurrentInstance,
-  nextTick,
-  onMounted,
-  reactive,
-  toRefs,
-} from "vue";
+import { ElDialog, ElMessage } from "element-plus";
+import { defineComponent, nextTick, onMounted, reactive, toRefs } from "vue";
 import DoctorInfoDialog from "./components/DoctorInfo.vue";
 import api from "@/api/index";
+interface doctorTable {
+  avatar: string;
+  name: string;
+  age: number;
+  username: string;
+}
 export default defineComponent({
   name: "AdminDoctorManage",
   components: {
@@ -79,20 +78,11 @@ export default defineComponent({
   setup() {
     const state = reactive({
       filterForm: {
-        username: "",
+        doctor: "",
         department: "",
       },
       departmentOptions: ["儿科"],
-      doctorTable: [
-        {
-          username: "李淳罡",
-          account: "123",
-          age: 31,
-          department: "儿科",
-          type: "专家",
-          avatar: "",
-        },
-      ],
+      doctorTable: [] as Array<doctorTable>,
       pageInfo: {
         currentPage: 1,
         pageSize: 10,
@@ -100,11 +90,19 @@ export default defineComponent({
       },
       tableColumns: [
         {
+          prop: "avatar",
+          label: "头像",
+        },
+        {
           prop: "name",
           label: "医生姓名",
         },
         {
-          prop: "account",
+          prop: "gender",
+          label: "性别",
+        },
+        {
+          prop: "username",
           label: "账号",
         },
         {
@@ -116,8 +114,12 @@ export default defineComponent({
           label: "科室",
         },
         {
-          prop: "type",
+          prop: "doctorRank",
           label: "级别",
+        },
+        {
+          prop: "expense",
+          label: "挂号费",
         },
       ],
       doctorInfo: null,
@@ -129,10 +131,23 @@ export default defineComponent({
         ...state.pageInfo,
       };
       const response = await api.doctor.apiGetDoctorList(params);
-      console.log(response);
+      if (response.data.code === 200) {
+        state.doctorTable = [
+          {
+            avatar: "",
+            name: "2",
+            age: 18,
+            username: "123",
+          },
+        ];
+        state.pageInfo.total = response.data.data.total;
+      } else {
+        ElMessage.error(response.data.msg);
+      }
     };
     const onSubmit = () => {
-      console.log(state.filterForm);
+      state.pageInfo.currentPage = 1;
+      getDoctorList();
     };
     const addDoctor = () => {
       state.doctorInfo = null;
@@ -146,10 +161,12 @@ export default defineComponent({
     };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
+      getDoctorList();
     };
     const handleSizeChange = (pageSize: number) => {
       state.pageInfo.pageSize = pageSize;
       state.pageInfo.currentPage = 1;
+      getDoctorList();
     };
     onMounted(() => {
       getDoctorList();

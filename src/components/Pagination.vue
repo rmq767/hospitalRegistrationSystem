@@ -41,8 +41,7 @@ export default defineComponent({
     },
   },
   emits: ["handleSizeChange", "handleCurrentChange"],
-  setup() {
-    const { emit } = getCurrentInstance() as any;
+  setup(props, { emit }) {
     const handleSizeChange = (size: number) => {
       emit("handleSizeChange", size);
     };

@@ -21,8 +21,8 @@
       <el-form-item label="医生姓名：" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="账号：" prop="account">
-        <el-input v-model="form.account" :disabled="isEdit"></el-input>
+      <el-form-item label="账号：" prop="username">
+        <el-input v-model="form.username" :disabled="isEdit"></el-input>
       </el-form-item>
       <el-form-item label="年龄：" prop="age">
         <el-input-number
@@ -55,7 +55,7 @@ interface Info {
   avatar: string;
   name: string;
   age: number;
-  account: string;
+  username: string;
 }
 export default defineComponent({
   name: "DoctorInfo",
@@ -75,7 +75,7 @@ export default defineComponent({
         avatar: "",
         name: "",
         age: 18,
-        account: "",
+        username: "",
       },
       doctorFormEl: ElForm,
       rules: formRules,
@@ -88,6 +88,11 @@ export default defineComponent({
       formEl.validate((valid) => {
         if (valid) {
           console.log(state.form);
+          if (props.info) {
+            // 编辑
+          } else {
+            // 新增
+          }
           state.doctorFormEl.resetFields();
           close();
         } else {
@@ -116,7 +121,7 @@ export default defineComponent({
             avatar: "",
             name: "",
             age: 18,
-            account: "",
+            username: "",
           };
         }
       }
@@ -132,7 +137,7 @@ export default defineComponent({
     //     : {
     //         name: "",
     //         age: 18,
-    //         account: "",
+    //         username: "",
     //       };
     //   console.log(state.form);
     // });

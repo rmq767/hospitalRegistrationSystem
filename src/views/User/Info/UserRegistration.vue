@@ -66,7 +66,7 @@ export default defineComponent({
     const isLogin = computed(() => {
       const userInfo = Session.get("userInfo");
       if (userInfo) {
-        return userInfo.roles[0] === "common";
+        return userInfo.roles === "user";
       } else {
         return false;
       }

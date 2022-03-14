@@ -49,8 +49,8 @@ export default defineComponent({
     });
     const isLogin = computed(() => {
       const userInfo = Session.get("userInfo");
-      if (userInfo && userInfo.roles[0]) {
-        userName.value = userInfo.roles[0];
+      if (userInfo && userInfo.username) {
+        userName.value = userInfo.username;
         return true;
       } else {
         return false;

@@ -150,7 +150,7 @@ export default defineComponent({
 
     const isDoctor = computed(() => {
       let userinfo = Session.get("userInfo");
-      const role = (userinfo && Session.get("userInfo").roles[0]) || "common";
+      const role = (userinfo && Session.get("userInfo").roles) || "user";
       return role === "doctor";
     });
 

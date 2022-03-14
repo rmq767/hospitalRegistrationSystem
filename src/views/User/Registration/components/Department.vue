@@ -31,8 +31,7 @@ import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "Department",
   emits: ["change"],
-  setup() {
-    const { emit } = getCurrentInstance() as any;
+  setup(props, { emit }) {
     const state = reactive({
       form: {
         department: "",

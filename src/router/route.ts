@@ -32,7 +32,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         name: "About",
         component: () => import("@/views/About.vue"),
         meta: {
-          roles: ["admin", "common"],
+          roles: ["admin", "user"],
           title: "关于我",
           icon: "",
           isHide: true,
@@ -44,7 +44,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         name: "ChangePassword",
         component: () => import("@/views/ChangePassword.vue"),
         meta: {
-          roles: ["admin", "common", "doctor"],
+          roles: ["admin", "user", "doctor"],
           title: "修改密码",
           icon: "",
           isHide: true,
@@ -56,7 +56,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         name: "UserInfo",
         component: () => import("@/views/User/Info/UserInfo.vue"),
         meta: {
-          roles: ["common"],
+          roles: ["user"],
           title: "用户信息",
           icon: "",
           isHide: true,
@@ -249,7 +249,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/views/Home.vue"),
     meta: {
       title: "首页",
-      roles: ["common", "admin", "doctor"],
+      roles: ["user", "admin", "doctor"],
       icon: "",
       isHide: true,
       permission: false,
@@ -261,7 +261,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/Index.vue"),
         meta: {
           title: "首页",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -273,7 +273,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/About.vue"),
         meta: {
           title: "医院简介",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -285,7 +285,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/Culture.vue"),
         meta: {
           title: "附院文化",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -297,7 +297,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/News/NewsList.vue"),
         meta: {
           title: "附院要闻",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -309,7 +309,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/News/NewsDetail.vue"),
         meta: {
           title: "新闻详情",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -321,7 +321,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/Notice/NoticeList.vue"),
         meta: {
           title: "附院公告",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -333,7 +333,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/Notice/NoticeDetail.vue"),
         meta: {
           title: "公告详情",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -345,7 +345,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Hospital/DepartmentDoctor.vue"),
         meta: {
           title: "科室及医生",
-          roles: ["common", "admin", "doctor"],
+          roles: ["user", "admin", "doctor"],
           icon: "",
           isHide: true,
           permission: false,
@@ -356,7 +356,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         name: "HospitalDoctorInfo",
         component: () => import("@/views/Doctor/Info/Index.vue"),
         meta: {
-          roles: ["common", "doctor", "admin"],
+          roles: ["user", "doctor", "admin"],
           title: "医生详情",
           icon: "",
           isHide: true,
@@ -368,7 +368,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         name: "Registration",
         component: () => import("@/views/User/Registration/Index.vue"),
         meta: {
-          roles: ["common"],
+          roles: ["user"],
           title: "我要挂号",
           icon: "",
           isHide: false,
@@ -380,7 +380,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         name: "DoctorSearch",
         component: () => import("@/views/Doctor/Filter/Index.vue"),
         meta: {
-          roles: ["common"],
+          roles: ["user"],
           title: "医生搜索/预约挂号",
           icon: "",
           isHide: false,
@@ -392,7 +392,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         name: "UserRegistration",
         component: () => import("@/views/User/Info/UserRegistration.vue"),
         meta: {
-          roles: ["common"],
+          roles: ["user"],
           title: "我的挂号",
           icon: "",
           isHide: false,
@@ -404,7 +404,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         name: "UserChangePassword",
         component: () => import("@/views/ChangePassword.vue"),
         meta: {
-          roles: ["common"],
+          roles: ["user"],
           title: "修改密码",
           icon: "",
           isHide: true,

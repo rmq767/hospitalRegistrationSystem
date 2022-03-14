@@ -46,12 +46,9 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => {
     hideLoading();
-    //响应成功
-    console.log("拦截器报错");
-    return response.data;
+    return response;
   },
   (error) => {
-    console.log(error);
     let message = "";
     //响应错误
     if (error.response && error.response.status) {
