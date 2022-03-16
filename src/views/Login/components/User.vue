@@ -101,7 +101,7 @@ export default defineComponent({
           username: response.data.data.username,
         };
         if (admin.includes(state.ruleForm.role)) {
-          Session.set("token", "token");
+          Session.set("token", response.data.data.token);
           Session.set("userInfo", info);
           /**
            * @description 添加动态路由

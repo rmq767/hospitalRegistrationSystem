@@ -1,14 +1,14 @@
 <template>
   <el-dialog v-model="dialogFormVisible" :title="dialogTitle" center>
     <el-form :model="form" label-width="100px" ref="userFormEl" :rules="rules">
-      <el-form-item label="患者姓名：" prop="name">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item label="患者姓名：" prop="username">
+        <el-input v-model="form.username"></el-input>
       </el-form-item>
       <el-form-item label="账号：" prop="account">
         <el-input v-model="form.account" :disabled="isEdit"></el-input>
       </el-form-item>
-      <el-form-item label="手机号：" prop="phone">
-        <el-input v-model="form.phone"></el-input>
+      <el-form-item label="手机号：" prop="phoneNumber">
+        <el-input v-model="form.phoneNumber"></el-input>
       </el-form-item>
       <el-form-item label="身份证号：" prop="id">
         <el-input v-model="form.id"></el-input>
@@ -38,8 +38,11 @@ import { ElForm } from "element-plus";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 import formRules from "@/utils/rules/userManageRules";
 interface Info {
-  name: string;
+  username: string;
   account: string;
+  phoneNumber: number;
+  id: number;
+  status: number;
 }
 export default defineComponent({
   name: "UserInfo",
@@ -54,10 +57,7 @@ export default defineComponent({
       dialogFormVisible: false,
       dialogTitle: "",
       isEdit: false,
-      form: {
-        name: "",
-        account: "",
-      },
+      form: {} as Info,
       userFormEl: ElForm,
       rules: formRules,
     });
@@ -93,10 +93,7 @@ export default defineComponent({
         } else {
           state.dialogTitle = "新增患者信息";
           state.isEdit = false;
-          state.form = {
-            name: "",
-            account: "",
-          };
+          state.form = {} as Info;
         }
       }
     );

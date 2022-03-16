@@ -1,3 +1,4 @@
+import { Session } from "./../utils/session";
 // http/index.js
 import axios, { AxiosRequestConfig } from "axios";
 import { ElLoading, ElMessage } from "element-plus";
@@ -33,8 +34,8 @@ instance.interceptors.request.use(
   (config: any) => {
     showLoading();
     // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
-    const token = window.localStorage.getItem("token");
-    token && (config.headers.Authorization = token);
+    const token = Session.get("token");
+    token && (config.headers.Token = token);
     return config;
   },
   (error) =>

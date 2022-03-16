@@ -1,15 +1,20 @@
 <template>
   <div>
     <el-card class="mb20">
-      <el-form :model="filterForm" label-width="100px" :inline="true">
-        <el-form-item label="患者姓名：">
-          <el-input v-model="filterForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="患者账号：">
-          <el-input v-model="filterForm.account"></el-input>
+      <el-form
+        :model="filterForm"
+        label-width="100px"
+        :inline="true"
+        ref="ruleFormRef"
+      >
+        <el-form-item label="患者姓名：" prop="username">
+          <el-input v-model="filterForm.username"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">筛选</el-button>
+          <el-button type="primary" @click="onReset(ruleFormRef)"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </el-card>
@@ -35,11 +40,17 @@
               :before-change="changeStatus"
             />
           </template>
+          <template v-else-if="col.prop === 'gender'" #default="scope">
+            {{ scope.row.gender === 0 ? "女" : "男" }}
+          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button type="primary" size="small" @click="editUser(scope.row)"
               >修改</el-button
+            >
+            <el-button type="danger" size="small" @click="deleteUser(scope.row)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -57,29 +68,38 @@
 </template>
 
 <script lang="ts">
-import { ElDialog } from "element-plus";
-import { defineComponent, nextTick, reactive, toRefs } from "vue";
+import { ElDialog, ElMessage, FormInstance } from "element-plus";
+import {
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+} from "vue";
 import UserInfoDialog from "./components/UserInfo.vue";
 import { UserInterface } from "@/utils/interface/user";
+import api from "@/api";
 export default defineComponent({
   name: "AdminUserManage",
   components: {
     UserInfoDialog,
   },
   setup() {
+    const ruleFormRef = ref<FormInstance>();
     const state = reactive({
       filterForm: {
-        name: "",
-        account: "",
-        phone: "",
+        username: "",
+        gender: "",
+        phoneNumber: "",
         id: "",
         status: 1,
       } as UserInterface,
       userTable: [
         {
-          name: "李淳罡",
-          account: "123",
-          phone: "123",
+          username: "李淳罡",
+          gender: "123",
+          phoneNumber: "123",
           id: "123",
           status: 0,
         },
@@ -91,15 +111,15 @@ export default defineComponent({
       },
       tableColumns: [
         {
-          prop: "name",
+          prop: "username",
           label: "患者姓名",
         },
         {
-          prop: "account",
-          label: "患者账号",
+          prop: "gender",
+          label: "性别",
         },
         {
-          prop: "phone",
+          prop: "phoneNumber",
           label: "患者手机号",
         },
         {
@@ -114,18 +134,45 @@ export default defineComponent({
       userInfo: null,
       userDialogEl: ElDialog,
     });
+    /**
+     * @description 筛选
+     */
     const onSubmit = () => {
-      console.log(state.filterForm);
+      getUserList();
+    };
+    /**
+     * @description 重置
+     */
+    const onReset = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
+      getUserList();
     };
     const addUser = () => {
       state.userInfo = null;
       state.userDialogEl.open();
     };
+    /**
+     * @description 编辑用户
+     */
     const editUser = (row: any) => {
       nextTick(() => {
         state.userInfo = Object.assign({}, row);
       });
       state.userDialogEl.open();
+    };
+    const deleteUser = async (row: UserInterface) => {
+      try {
+        const response = await api.user.apiDeleteUser(row.id);
+        if (response.data.code === 200) {
+          ElMessage.success("删除成功");
+          getUserList();
+        } else {
+          ElMessage.error(response.data.msg);
+        }
+      } catch (error: any) {
+        ElMessage.error(error);
+      }
     };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
@@ -137,6 +184,29 @@ export default defineComponent({
     const changeStatus = () => {
       return false;
     };
+    /**
+     * @description 获取用户列表
+     */
+    const getUserList = async () => {
+      try {
+        const params = {
+          ...state.pageInfo,
+          ...state.filterForm,
+        };
+        const response = await api.user.apiGetUserList(params);
+        if (response.data.code === 200) {
+          state.userTable = response.data.data.records;
+          state.pageInfo.total = response.data.data.total;
+        } else {
+          ElMessage.error(response.data.msg);
+        }
+      } catch (error: any) {
+        ElMessage.error(error);
+      }
+    };
+    onMounted(() => {
+      getUserList();
+    });
     return {
       ...toRefs(state),
       onSubmit,
@@ -145,6 +215,9 @@ export default defineComponent({
       handleCurrentChange,
       handleSizeChange,
       changeStatus,
+      onReset,
+      ruleFormRef,
+      deleteUser,
     };
   },
 });

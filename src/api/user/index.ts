@@ -43,7 +43,7 @@ export default {
    * @param {number} id
    * @return {*}
    */
-  apiDeleteUser(id: number) {
+  apiDeleteUser(id: number | string) {
     return request({
       url: `/user/deleteUser/${id}`,
       method: "delete",

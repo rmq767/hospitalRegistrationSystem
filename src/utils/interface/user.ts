@@ -1,6 +1,7 @@
 export interface UserInterface {
-  name: string;
-  phone: string | number;
+  username: string;
+  phoneNumber: string | number;
+  gender: number | string;
   id: string | number;
   age?: string | number;
   date?: string;
