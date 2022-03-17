@@ -31,9 +31,9 @@ export default {
    * @param {number} id
    * @return {*}
    */
-  apiEditDoctor(data: object, id: number) {
+  apiEditDoctor(data: object) {
     return request({
-      url: `/doctor/updateDoctor/${id}`,
+      url: `/doctor/updateDoctor`,
       method: "put",
       data,
     });

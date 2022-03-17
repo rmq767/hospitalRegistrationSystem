@@ -1,9 +1,14 @@
 <template>
   <div>
     <el-card class="mb20">
-      <el-form :model="filterForm" label-width="100px" :inline="true">
+      <el-form
+        :model="filterForm"
+        label-width="100px"
+        :inline="true"
+        ref="ruleFormRef"
+      >
         <el-form-item label="医生姓名：">
-          <el-input v-model="filterForm.doctor"></el-input>
+          <el-input v-model="filterForm.username"></el-input>
         </el-form-item>
         <el-form-item label="科室：">
           <el-select v-model="filterForm.department" clearable filterable>
@@ -18,6 +23,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">筛选</el-button>
+          <el-button @click="onReset(ruleFormRef)">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -26,13 +32,15 @@
         <el-button type="primary" @click="addDoctor">新增医生</el-button>
       </div>
       <el-table :data="doctorTable">
-        <el-table-column
-          v-for="col in tableColumns"
-          :prop="col.prop"
-          :key="col.prop"
-          :label="col.label"
-        >
+        <el-table-column label="账号" prop="username"> </el-table-column>
+        <el-table-column label="图片" prop="avatar"> </el-table-column>
+        <el-table-column label="性别" prop="gender"> </el-table-column>
+        <el-table-column label="级别" prop="doctorRank"> </el-table-column>
+        <el-table-column label="毕业院校" prop="graduateInstitutions">
         </el-table-column>
+        <el-table-column label="工作年限" prop="workTime"> </el-table-column>
+        <el-table-column label="联系电话" prop="phoneNumber"> </el-table-column>
+        <el-table-column label="简介" prop="introduction"> </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button
@@ -40,6 +48,12 @@
               size="small"
               @click="editDoctor(scope.row)"
               >修改</el-button
+            >
+            <el-button
+              type="danger"
+              size="small"
+              @click="deleteDoctor(scope.row)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -55,76 +69,48 @@
     <DoctorInfoDialog
       :info="doctorInfo"
       ref="doctorDialogEl"
+      @submitForm="submitForm"
     ></DoctorInfoDialog>
   </div>
 </template>
 
 <script lang="ts">
-import { ElDialog, ElMessage } from "element-plus";
-import { defineComponent, nextTick, onMounted, reactive, toRefs } from "vue";
+import { ElDialog, ElMessage, FormInstance } from "element-plus";
+import {
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+} from "vue";
 import DoctorInfoDialog from "./components/DoctorInfo.vue";
 import api from "@/api/index";
-interface doctorTable {
-  avatar: string;
-  name: string;
-  age: number;
-  username: string;
-}
 export default defineComponent({
   name: "AdminDoctorManage",
   components: {
     DoctorInfoDialog,
   },
   setup() {
+    const ruleFormRef = ref<FormInstance>();
     const state = reactive({
       filterForm: {
-        doctor: "",
+        username: "",
         department: "",
       },
       departmentOptions: ["儿科"],
-      doctorTable: [] as Array<doctorTable>,
+      doctorTable: [],
       pageInfo: {
         currentPage: 1,
         pageSize: 10,
         total: 0,
       },
-      tableColumns: [
-        {
-          prop: "avatar",
-          label: "头像",
-        },
-        {
-          prop: "name",
-          label: "医生姓名",
-        },
-        {
-          prop: "gender",
-          label: "性别",
-        },
-        {
-          prop: "username",
-          label: "账号",
-        },
-        {
-          prop: "age",
-          label: "年龄",
-        },
-        {
-          prop: "department",
-          label: "科室",
-        },
-        {
-          prop: "doctorRank",
-          label: "级别",
-        },
-        {
-          prop: "expense",
-          label: "挂号费",
-        },
-      ],
       doctorInfo: null,
       doctorDialogEl: ElDialog,
     });
+    /**
+     * @description 获取医生列表
+     */
     const getDoctorList = async () => {
       const params = {
         ...state.filterForm,
@@ -132,22 +118,66 @@ export default defineComponent({
       };
       const response = await api.doctor.apiGetDoctorList(params);
       if (response.data.code === 200) {
-        state.doctorTable = [
-          {
-            avatar: "",
-            name: "2",
-            age: 18,
-            username: "123",
-          },
-        ];
+        state.doctorTable = response.data.data.records;
         state.pageInfo.total = response.data.data.total;
       } else {
         ElMessage.error(response.data.msg);
       }
     };
+    /**
+     * @description 新增或者编辑
+     */
+    const submitForm = (data: any) => {
+      if (data.isEdit) {
+        editDoctorForm(data.form);
+      } else {
+        addDoctorForm(data.form);
+      }
+    };
+    /**
+     * @description 编辑医生
+     */
+    const editDoctorForm = async (form: object) => {
+      const response = await api.doctor.apiEditDoctor(form);
+      if (response.data.code === 200) {
+        ElMessage.success("修改成功！");
+        getDoctorList();
+      }
+    };
+    /**
+     * @description 添加医生
+     */
+    const addDoctorForm = async (form: object) => {
+      const response = await api.doctor.apiAddDoctor(form);
+      if (response.data.code === 200) {
+        ElMessage.success("添加成功！");
+        getDoctorList();
+      }
+    };
+    /**
+     * @description 条件筛选
+     */
     const onSubmit = () => {
       state.pageInfo.currentPage = 1;
       getDoctorList();
+    };
+    /**
+     * @description 重置
+     */
+    const onReset = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
+      getDoctorList();
+    };
+    /**
+     * @description 删除医生
+     */
+    const deleteDoctor = async (row: any) => {
+      const resposne = await api.doctor.apiDeleteDoctor(row.id);
+      if (resposne.data.code === 200) {
+        ElMessage.success("删除成功！");
+        getDoctorList();
+      }
     };
     const addDoctor = () => {
       state.doctorInfo = null;
@@ -178,6 +208,10 @@ export default defineComponent({
       editDoctor,
       handleCurrentChange,
       handleSizeChange,
+      submitForm,
+      deleteDoctor,
+      ruleFormRef,
+      onReset,
     };
   },
 });

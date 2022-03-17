@@ -4,24 +4,20 @@
       <el-form-item label="患者姓名：" prop="username">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
-      <el-form-item label="账号：" prop="account">
-        <el-input v-model="form.account" :disabled="isEdit"></el-input>
+      <el-form-item label="密码：" prop="password">
+        <el-input v-model="form.password"></el-input>
+      </el-form-item>
+      <el-form-item label="性别：" prop="gender">
+        <el-radio-group v-model="form.gender">
+          <el-radio :label="0"> 女 </el-radio>
+          <el-radio :label="1"> 男 </el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="手机号：" prop="phoneNumber">
         <el-input v-model="form.phoneNumber"></el-input>
       </el-form-item>
       <el-form-item label="身份证号：" prop="id">
         <el-input v-model="form.id"></el-input>
-      </el-form-item>
-      <el-form-item label="禁启用：" prop="status">
-        <el-switch
-          v-model="form.status"
-          inline-prompt
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="启用"
-          inactive-text="禁用"
-        />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -39,10 +35,10 @@ import { defineComponent, reactive, toRefs, watch } from "vue";
 import formRules from "@/utils/rules/userManageRules";
 interface Info {
   username: string;
-  account: string;
   phoneNumber: number;
   id: number;
   status: number;
+  gender: number;
 }
 export default defineComponent({
   name: "UserInfo",
@@ -52,7 +48,8 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props) {
+  emits: ["submitForm"],
+  setup(props, { emit }) {
     const state = reactive({
       dialogFormVisible: false,
       dialogTitle: "",
@@ -66,9 +63,9 @@ export default defineComponent({
     };
     const onSubmit = (formEl: InstanceType<typeof ElForm> | undefined) => {
       if (!formEl) return;
-      formEl.validate((valid) => {
+      formEl.validate(async (valid) => {
         if (valid) {
-          console.log(state.form);
+          emit("submitForm", { isEdit: state.isEdit, form: state.form });
           state.userFormEl.resetFields();
           close();
         } else {

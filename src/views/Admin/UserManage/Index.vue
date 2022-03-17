@@ -12,9 +12,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">筛选</el-button>
-          <el-button type="primary" @click="onReset(ruleFormRef)"
-            >重置</el-button
-          >
+          <el-button @click="onReset(ruleFormRef)">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -29,18 +27,7 @@
           :key="col.prop"
           :label="col.label"
         >
-          <template v-if="col.prop === 'status'" #default="scope">
-            <el-switch
-              v-model="scope.row.status"
-              inline-prompt
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="启用"
-              inactive-text="禁用"
-              :before-change="changeStatus"
-            />
-          </template>
-          <template v-else-if="col.prop === 'gender'" #default="scope">
+          <template v-if="col.prop === 'gender'" #default="scope">
             {{ scope.row.gender === 0 ? "女" : "男" }}
           </template>
         </el-table-column>
@@ -63,7 +50,11 @@
         @handleSizeChange="handleSizeChange"
       ></Pagination>
     </el-card>
-    <UserInfoDialog :info="userInfo" ref="userDialogEl"></UserInfoDialog>
+    <UserInfoDialog
+      :info="userInfo"
+      ref="userDialogEl"
+      @submitForm="submitForm"
+    ></UserInfoDialog>
   </div>
 </template>
 
@@ -90,20 +81,11 @@ export default defineComponent({
     const state = reactive({
       filterForm: {
         username: "",
-        gender: "",
+        gender: 0,
         phoneNumber: "",
         id: "",
-        status: 1,
       } as UserInterface,
-      userTable: [
-        {
-          username: "李淳罡",
-          gender: "123",
-          phoneNumber: "123",
-          id: "123",
-          status: 0,
-        },
-      ],
+      userTable: [],
       pageInfo: {
         currentPage: 1,
         pageSize: 10,
@@ -125,10 +107,6 @@ export default defineComponent({
         {
           prop: "id",
           label: "患者身份证",
-        },
-        {
-          prop: "status",
-          label: "禁启用",
         },
       ],
       userInfo: null,
@@ -204,6 +182,33 @@ export default defineComponent({
         ElMessage.error(error);
       }
     };
+    /**
+     * @description 新增或者编辑
+     */
+    const submitForm = (data: any) => {
+      if (data.isEdit) {
+        editUserForm(data.form);
+      } else {
+        addUserForm(data.form);
+      }
+    };
+    /**
+     * @description 编辑用户
+     */
+    const editUserForm = async (form: object) => {
+      const response = await api.user.apiEditUser(form);
+      if (response.data.code === 200) {
+        ElMessage.success("修改成功！");
+        getUserList();
+      }
+    };
+    const addUserForm = async (form: object) => {
+      const response = await api.user.apiAddUser(form);
+      if (response.data.code === 200) {
+        ElMessage.success("添加成功！");
+        getUserList();
+      }
+    };
     onMounted(() => {
       getUserList();
     });
@@ -218,6 +223,7 @@ export default defineComponent({
       onReset,
       ruleFormRef,
       deleteUser,
+      submitForm,
     };
   },
 });

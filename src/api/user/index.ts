@@ -31,9 +31,9 @@ export default {
    * @param {number} id
    * @return {*}
    */
-  apiEditUser(data: object, id: number) {
+  apiEditUser(data: object) {
     return request({
-      url: `/user/updateUser/${id}`,
+      url: `/user/updateUser`,
       method: "put",
       data,
     });
