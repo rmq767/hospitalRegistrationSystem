@@ -6,10 +6,10 @@
       ref="noticeFormEl"
       :rules="rules"
     >
-      <el-form-item label="公告名称：" prop="title">
+      <el-form-item label="公告标题：" prop="title">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
-      <el-form-item label="简介：" prop="content">
+      <el-form-item label="内容：" prop="content">
         <el-input v-model="form.content"></el-input>
       </el-form-item>
     </el-form>
@@ -40,7 +40,8 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props) {
+  emits: ["submitForm"],
+  setup(props, { emit }) {
     const state = reactive({
       dialogFormVisible: false,
       dialogTitle: "",
@@ -50,6 +51,7 @@ export default defineComponent({
       },
       noticeFormEl: ElForm,
       rules: formRules,
+      isEdit: false,
     });
     const resetForm = () => {
       close();
@@ -58,7 +60,7 @@ export default defineComponent({
       if (!formEl) return;
       formEl.validate((valid) => {
         if (valid) {
-          console.log(state.form);
+          emit("submitForm", { form: state.form, isEdit: state.isEdit });
           state.noticeFormEl.resetFields();
           close();
         } else {
@@ -79,12 +81,14 @@ export default defineComponent({
         if (newValue) {
           state.dialogTitle = "编辑公告信息";
           state.form = newValue as Info;
+          state.isEdit = true;
         } else {
           state.dialogTitle = "新增公告信息";
           state.form = {
             title: "",
             content: "",
           };
+          state.isEdit = false;
         }
       }
     );

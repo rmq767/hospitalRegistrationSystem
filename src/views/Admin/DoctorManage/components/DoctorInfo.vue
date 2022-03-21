@@ -9,6 +9,7 @@
       <el-form-item label="医生图片：" prop="avatar">
         <el-upload
           class="avatar-uploader"
+          name="pic"
           :action="uploadUrl"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
@@ -24,7 +25,7 @@
       <el-form-item label="密码：" prop="password">
         <el-input v-model="form.password"></el-input>
       </el-form-item>
-      <el-form-item label="年龄：" prop="age">
+      <!-- <el-form-item label="年龄：" prop="age">
         <el-input-number
           v-model="form.age"
           :min="1"
@@ -33,7 +34,7 @@
           :controls="false"
         >
         </el-input-number>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="性别：" prop="gender">
         <el-radio-group v-model="form.gender">
           <el-radio :label="0"> 女 </el-radio>
@@ -87,10 +88,21 @@
 </template>
 
 <script lang="ts">
-import { ElForm } from "element-plus";
+import { ElForm, UploadFile } from "element-plus";
 import mixin from "@/mixin";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 import formRules from "@/utils/rules/doctorManageRules";
+interface InfoForm {
+  avatar: string;
+  username: string;
+  password: string;
+  gender: number;
+  doctorRank: string;
+  graduateInstitutions: string;
+  workTime: number;
+  phoneNumber: string;
+  introduction: string;
+}
 export default defineComponent({
   name: "DoctorInfo",
   mixins: [mixin],
@@ -106,7 +118,7 @@ export default defineComponent({
       dialogFormVisible: false,
       dialogTitle: "",
       isEdit: false,
-      form: {},
+      form: {} as InfoForm,
       doctorFormEl: ElForm,
       rules: formRules,
       rank: ["普通医生", "专家", "主任"],
@@ -139,11 +151,11 @@ export default defineComponent({
         if (newValue) {
           state.dialogTitle = "编辑医生信息";
           state.isEdit = true;
-          state.form = newValue;
+          state.form = newValue as InfoForm;
         } else {
           state.dialogTitle = "新增医生信息";
           state.isEdit = false;
-          state.form = {};
+          state.form = {} as InfoForm;
         }
       }
       // {
@@ -151,7 +163,9 @@ export default defineComponent({
       //   deep: true,
       // }
     );
-    const handleAvatarSuccess = () => {};
+    const handleAvatarSuccess = (res: any, file: UploadFile) => {
+      state.form.avatar = res.data;
+    };
     // onMounted(() => {
     //   state.form = (props.info as Info)
     //     ? (props.info as Info)

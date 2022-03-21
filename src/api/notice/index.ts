@@ -31,9 +31,9 @@ export default {
    * @param {number} id
    * @return {*}
    */
-  apiEditAnnouncement(data: object, id: number) {
+  apiEditAnnouncement(data: object) {
     return request({
-      url: `/announcement/updateAnnouncement/${id}`,
+      url: `/announcement/updateAnnouncement`,
       method: "put",
       data,
     });

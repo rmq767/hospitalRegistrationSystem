@@ -33,7 +33,16 @@
       </div>
       <el-table :data="doctorTable">
         <el-table-column label="账号" prop="username"> </el-table-column>
-        <el-table-column label="图片" prop="avatar"> </el-table-column>
+        <el-table-column label="图片" prop="avatar">
+          <template #default="scope">
+            <!-- <img :src="scope.row.avatar" alt="" /> -->
+            <el-image
+              :src="scope.row.avatar"
+              fit="fill"
+              :lazy="true"
+            ></el-image>
+          </template>
+        </el-table-column>
         <el-table-column label="性别" prop="gender"> </el-table-column>
         <el-table-column label="级别" prop="doctorRank"> </el-table-column>
         <el-table-column label="毕业院校" prop="graduateInstitutions">

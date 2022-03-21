@@ -3,7 +3,7 @@ import { ElMessage } from "element-plus";
 const baseMixin = {
   data() {
     return {
-      uploadUrl: "https://jsonplaceholder.typicode.com/posts/",
+      uploadUrl: "http://192.168.101.13:10001/api/images/upload",
     };
   },
   methods: {
