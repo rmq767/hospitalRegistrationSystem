@@ -3,6 +3,8 @@ import user from "./user";
 import admin from "./admin";
 import login from "./login";
 import notice from "./notice";
+import evaluation from "./evaluation";
+import department from "./department";
 
 export default {
   doctor,
@@ -10,4 +12,6 @@ export default {
   admin,
   login,
   notice,
+  evaluation,
+  department,
 };

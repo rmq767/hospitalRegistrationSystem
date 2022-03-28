@@ -154,10 +154,12 @@ export default defineComponent({
     };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
+      getUserList();
     };
     const handleSizeChange = (pageSize: number) => {
       state.pageInfo.pageSize = pageSize;
       state.pageInfo.currentPage = 1;
+      getUserList();
     };
     const changeStatus = () => {
       return false;

@@ -27,6 +27,9 @@
           :key="col.prop"
           :label="col.label"
         >
+          <template #default="scope" v-if="col.prop === 'creatTime'">
+            <span>{{ formatDate(scope.row.createTime) }}</span>
+          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
@@ -75,6 +78,7 @@ import {
   toRefs,
 } from "vue";
 import Dialog from "./components/NoticeDialog.vue";
+import mixin from "@/mixin";
 interface notice {
   title: string;
   content: string;
@@ -84,6 +88,7 @@ export default defineComponent({
   components: {
     Dialog,
   },
+  mixins: [mixin],
   setup() {
     const ruleFormRef = ref<FormInstance>();
     const state = reactive({
@@ -109,6 +114,10 @@ export default defineComponent({
         {
           prop: "adminId",
           label: "创建人",
+        },
+        {
+          prop: "creatTime",
+          label: "创建时间",
         },
       ],
       noticeInfo: null,

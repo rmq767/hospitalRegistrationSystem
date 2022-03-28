@@ -1,37 +1,41 @@
 <template>
   <div>
     <el-card class="mb20">
-      <el-form :model="filterForm" label-width="100px" :inline="true">
-        <el-form-item label="用户名：">
+      <el-form
+        :model="filterForm"
+        label-width="100px"
+        :inline="true"
+        ref="ruleFormRef"
+      >
+        <el-form-item label="用户名：" prop="username">
           <el-input v-model="filterForm.username" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">筛选</el-button>
+          <el-button @click="onReset(ruleFormRef)">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
     <el-card>
-      <div class="mb20">
-        <el-button type="primary" @click="multipleAudit">批量审核</el-button>
-        <el-button type="primary" @click="multipleDelete">批量删除</el-button>
-      </div>
-      <el-table
-        :data="evaluationTable"
-        @selection-change="handleSelectionChange"
-        ref="multipleTableRef"
-      >
-        <el-table-column type="selection" width="55" />
+      <el-table :data="evaluationTable" ref="multipleTableRef">
         <el-table-column
           v-for="col in tableColumns"
           :prop="col.prop"
           :key="col.prop"
           :label="col.label"
         >
-          <template #default="scope" v-if="col.prop === 'status'">
+          <template
+            #default="scope"
+            v-if="col.prop === 'status' || col.prop === 'createTime'"
+          >
             <el-switch
+              v-if="col.prop === 'status'"
               v-model="scope.row.status"
               :before-change="changeStatus"
             />
+            <span v-if="col.prop === 'createTime'">{{
+              formatDate(scope.row.createTime)
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -53,31 +57,33 @@
         @handleSizeChange="handleSizeChange"
       ></Pagination>
     </el-card>
-    <Dialog :info="evaluationInfo" ref="evaluationDialogEl"></Dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { ElDialog, ElMessage, ElMessageBox, ElTable } from "element-plus";
-import { defineComponent, reactive, toRefs } from "vue";
-import Dialog from "./components/EvaluationDialog.vue";
+import api from "@/api";
+import {
+  ElDialog,
+  ElMessage,
+  ElMessageBox,
+  ElTable,
+  FormInstance,
+} from "element-plus";
+import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 interface Evaluation {
   username: string;
   type: string;
   status: number;
 }
-
+import mixin from "@/mixin";
 export default defineComponent({
   name: "SettingEvaluation",
-  components: {
-    Dialog,
-  },
+  mixins: [mixin],
   setup() {
+    const ruleFormRef = ref<FormInstance>();
     const state = reactive({
       filterForm: {
         username: "",
-        type: "",
-        status: 0,
       },
       evaluationTable: [
         {
@@ -104,6 +110,14 @@ export default defineComponent({
           label: "评价类型",
         },
         {
+          prop: "content",
+          label: "评价内容",
+        },
+        {
+          prop: "createTime",
+          label: "创建时间",
+        },
+        {
           prop: "status",
           label: "审核状态",
         },
@@ -111,95 +125,92 @@ export default defineComponent({
       evaluationInfo: null,
       evaluationDialogEl: ElDialog,
       multipleTableRef: ElTable,
-      multipleEvaluation: [] as Evaluation[],
     });
+    /**
+     * @description 获取评价
+     */
+    const getEvalitionList = async () => {
+      const parmas = {
+        currentPage: state.pageInfo.currentPage,
+        pageSize: state.pageInfo.pageSize,
+        ...state.filterForm,
+      };
+      try {
+        const response = await api.evaluation.apiGetEvaluationList(parmas);
+        if (response.data.code === 200) {
+          state.evaluationTable = response.data.data.records;
+          state.pageInfo.total = response.data.data.total;
+        } else {
+          ElMessage.error(response.data.msg);
+        }
+      } catch (error: any) {
+        ElMessage.error(error);
+      }
+    };
     const onSubmit = () => {
-      console.log(state.filterForm);
+      getEvalitionList();
+    };
+    /**
+     * @description 重置
+     */
+    const onReset = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
+      getEvalitionList();
     };
     const addNotice = () => {
       state.evaluationInfo = null;
       state.evaluationDialogEl.open();
     };
+    /**
+     * @description 删除评价
+     */
     const deleteEvaluation = (row: any) => {
       ElMessageBox.confirm("确定删除?", "提示", {
         confirmButtonText: "确认",
         cancelButtonText: "取消",
         type: "warning",
       })
-        .then(() => {
-          ElMessage({
-            type: "success",
-            message: "取消成功！",
-          });
+        .then(async () => {
+          try {
+            const response = await api.evaluation.apiDeleteEvaluation(row.id);
+            if (response.data.code === 200) {
+              ElMessage.success("删除成功！");
+              getEvalitionList();
+            } else {
+              ElMessage.error(response.data.msg);
+            }
+          } catch (error: any) {
+            ElMessage.error(error);
+          }
         })
         .catch(() => {});
-    };
-    const multipleAudit = () => {
-      if (!state.multipleEvaluation.length) {
-        ElMessage.warning("请选择数据！");
-        return false;
-      }
-      ElMessageBox.confirm("确定审核通过?", "提示", {
-        confirmButtonText: "确认",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          console.log(state.multipleEvaluation);
-          state.multipleTableRef.clearSelection();
-          state.multipleEvaluation = [];
-          ElMessage({
-            type: "success",
-            message: "取消成功！",
-          });
-        })
-        .catch(() => {});
-    };
-    const multipleDelete = () => {
-      if (!state.multipleEvaluation.length) {
-        ElMessage.warning("请选择数据！");
-        return false;
-      }
-      ElMessageBox.confirm("确定全部删除?", "提示", {
-        confirmButtonText: "确认",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          console.log(state.multipleEvaluation);
-          state.multipleTableRef.clearSelection();
-          state.multipleEvaluation = [];
-          ElMessage({
-            type: "success",
-            message: "取消成功！",
-          });
-        })
-        .catch(() => {});
-    };
-    const handleSelectionChange = (val: Evaluation[]) => {
-      state.multipleEvaluation = val;
     };
     const changeStatus = () => {
       return false;
     };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
+      getEvalitionList();
     };
     const handleSizeChange = (pageSize: number) => {
       state.pageInfo.pageSize = pageSize;
       state.pageInfo.currentPage = 1;
+      getEvalitionList();
     };
+    onMounted(() => {
+      getEvalitionList();
+    });
     return {
       ...toRefs(state),
       onSubmit,
       addNotice,
       deleteEvaluation,
-      multipleAudit,
-      multipleDelete,
-      handleSelectionChange,
       changeStatus,
       handleCurrentChange,
       handleSizeChange,
+      ruleFormRef,
+      onReset,
     };
   },
 });

@@ -43,8 +43,14 @@
             ></el-image>
           </template>
         </el-table-column>
-        <el-table-column label="性别" prop="gender"> </el-table-column>
+        <el-table-column label="性别" prop="gender">
+          <template #default="scope">
+            <span>{{ scope.row.gender ? "男" : "女" }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="级别" prop="doctorRank"> </el-table-column>
+        <el-table-column label="科室" prop="administrativeName">
+        </el-table-column>
         <el-table-column label="毕业院校" prop="graduateInstitutions">
         </el-table-column>
         <el-table-column label="工作年限" prop="workTime"> </el-table-column>

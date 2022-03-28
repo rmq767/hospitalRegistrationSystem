@@ -99,6 +99,7 @@ export default defineComponent({
         let info = {
           roles: state.ruleForm.role,
           username: response.data.data.username,
+          id: response.data.data.id,
         };
         if (admin.includes(state.ruleForm.role)) {
           Session.set("token", response.data.data.token);

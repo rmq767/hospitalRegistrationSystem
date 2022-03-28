@@ -6,11 +6,17 @@
       ref="departmentFormEl"
       :rules="rules"
     >
-      <el-form-item label="科室名称：" prop="department">
-        <el-input v-model="form.department"></el-input>
+      <el-form-item label="科室名称：" prop="name">
+        <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="简介：" prop="desc">
-        <el-input v-model="form.desc"></el-input>
+      <el-form-item label="科室编号：" prop="number">
+        <el-input v-model="form.number"></el-input>
+      </el-form-item>
+      <el-form-item label="科室位置：" prop="location">
+        <el-input v-model="form.location"></el-input>
+      </el-form-item>
+      <el-form-item label="简介：" prop="introduction">
+        <el-input v-model="form.introduction"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -29,8 +35,10 @@ import { ElForm } from "element-plus";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 import formRules from "@/utils/rules/departmentManageRules";
 interface Info {
-  department: string;
-  desc: string;
+  name: string;
+  introduction: string;
+  number: string;
+  location: string;
 }
 export default defineComponent({
   name: "DepartmentDialog",
@@ -40,16 +48,20 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props) {
+  emits: ["submitForm"],
+  setup(props, { emit }) {
     const state = reactive({
       dialogFormVisible: false,
       dialogTitle: "",
       form: {
-        department: "",
-        desc: "",
+        name: "",
+        introduction: "",
+        number: "",
+        location: "",
       },
       departmentFormEl: ElForm,
       rules: formRules,
+      isEdit: false,
     });
     const resetForm = () => {
       close();
@@ -58,7 +70,7 @@ export default defineComponent({
       if (!formEl) return;
       formEl.validate((valid) => {
         if (valid) {
-          console.log(state.form);
+          emit("submitForm", { form: state.form, isEdit: state.isEdit });
           state.departmentFormEl.resetFields();
           close();
         } else {
@@ -79,29 +91,19 @@ export default defineComponent({
         if (newValue) {
           state.dialogTitle = "编辑科室信息";
           state.form = newValue as Info;
+          state.isEdit = true;
         } else {
           state.dialogTitle = "新增科室信息";
           state.form = {
-            department: "",
-            desc: "",
+            name: "",
+            introduction: "",
+            number: "",
+            location: "",
           };
+          state.isEdit = false;
         }
       }
-      // {
-      //   immediate: true,
-      //   deep: true,
-      // }
     );
-    // onMounted(() => {
-    //   state.form = (props.info as Info)
-    //     ? (props.info as Info)
-    //     : {
-    //         name: "",
-    //         age: 18,
-    //         account: "",
-    //       };
-    //   console.log(state.form);
-    // });
     return { ...toRefs(state), resetForm, onSubmit, open, close };
   },
 });

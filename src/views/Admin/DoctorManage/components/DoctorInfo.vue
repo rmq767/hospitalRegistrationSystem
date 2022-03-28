@@ -25,7 +25,7 @@
       <el-form-item label="密码：" prop="password">
         <el-input v-model="form.password"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="年龄：" prop="age">
+      <el-form-item label="年龄：" prop="age">
         <el-input-number
           v-model="form.age"
           :min="1"
@@ -34,7 +34,7 @@
           :controls="false"
         >
         </el-input-number>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="性别：" prop="gender">
         <el-radio-group v-model="form.gender">
           <el-radio :label="0"> 女 </el-radio>

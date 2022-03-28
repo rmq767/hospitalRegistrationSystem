@@ -20,6 +20,9 @@ const baseMixin = {
       }
       return isJPGorPNG && isLt2M;
     },
+    formatDate(date: number) {
+      return new Date(date).toLocaleString().replace(/\//g, "-");
+    },
   },
 };
 

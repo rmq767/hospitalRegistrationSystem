@@ -31,9 +31,9 @@ export default {
    * @param {number} id
    * @return {*}
    */
-  apiEditAdministrative(data: object, id: number) {
+  apiEditAdministrative(data: object) {
     return request({
-      url: `/administrative/updateAdministrative/${id}`,
+      url: `/administrative/updateAdministrative`,
       method: "put",
       data,
     });
@@ -43,10 +43,11 @@ export default {
    * @param {number} id
    * @return {*}
    */
-  apiDeleteAdministrative(id: number) {
+  apiDeleteAdministrative(params: object) {
     return request({
-      url: `/administrative/deleteAdministrative/${id}`,
+      url: `/administrative/deleteAdministrative`,
       method: "delete",
+      params,
     });
   },
   /**
@@ -59,6 +60,16 @@ export default {
       url: "/administrative/getAdministrativeById",
       method: "get",
       params,
+    });
+  },
+  /**
+   * @description 获取所有科室
+   * @return {*}
+   */
+  apiGetAllAdministrative() {
+    return request({
+      url: "/administrative/getAdministrativeList",
+      method: "get",
     });
   },
 };
