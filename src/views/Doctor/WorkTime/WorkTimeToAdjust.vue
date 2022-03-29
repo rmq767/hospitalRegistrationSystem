@@ -54,7 +54,10 @@
 </template>
 
 <script lang="ts">
+import api from "@/api";
 import { formatDate } from "@/utils/formatTime";
+import { Session } from "@/utils/session";
+import { ElMessage } from "element-plus/lib/components";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "WorkTimeToAdjust",
@@ -78,6 +81,24 @@ export default defineComponent({
         },
       ],
     });
+    /**
+     * @description 获取工作时间
+     */
+    const getWorkTime = async () => {
+      const params = {
+        workerScheduleId: Session.get("userInfo").id,
+      };
+      try {
+        const response = await api.doctor.apiGetWorkTime(params);
+        if (response.data.code === 200) {
+          console.log(response);
+        } else {
+          ElMessage.error(response.data.msg);
+        }
+      } catch (error: any) {
+        ElMessage.error(error);
+      }
+    };
     /**
      * @description 获取今天日期或者日历跳转日期
      */
@@ -106,6 +127,7 @@ export default defineComponent({
     };
     onMounted(() => {
       getDay();
+      getWorkTime();
     });
     return {
       ...toRefs(state),

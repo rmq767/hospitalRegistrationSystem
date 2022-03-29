@@ -49,4 +49,16 @@ export default {
       method: "delete",
     });
   },
+  /**
+   * @description 获取指定医生工作时间
+   * @param {*} params
+   * @return {*}
+   */
+  apiGetWorkTime(params: object) {
+    return request({
+      url: "/workerSchedule/getWorkerScheduleById",
+      method: "get",
+      params,
+    });
+  },
 };

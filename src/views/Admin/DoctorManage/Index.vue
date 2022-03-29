@@ -11,12 +11,16 @@
           <el-input v-model="filterForm.username"></el-input>
         </el-form-item>
         <el-form-item label="科室：">
-          <el-select v-model="filterForm.department" clearable filterable>
+          <el-select
+            v-model="filterForm.administrativeName"
+            clearable
+            filterable
+          >
             <el-option
               v-for="item in departmentOptions"
-              :key="item"
-              :label="item"
-              :value="item"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -33,16 +37,15 @@
       </div>
       <el-table :data="doctorTable">
         <el-table-column label="账号" prop="username"> </el-table-column>
-        <el-table-column label="图片" prop="avatar">
+        <!-- <el-table-column label="图片" prop="avatar">
           <template #default="scope">
-            <!-- <img :src="scope.row.avatar" alt="" /> -->
             <el-image
               :src="scope.row.avatar"
               fit="fill"
               :lazy="true"
             ></el-image>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="性别" prop="gender">
           <template #default="scope">
             <span>{{ scope.row.gender ? "男" : "女" }}</span>
@@ -111,9 +114,9 @@ export default defineComponent({
     const state = reactive({
       filterForm: {
         username: "",
-        department: "",
+        administrativeName: "",
       },
-      departmentOptions: ["儿科"],
+      departmentOptions: [],
       doctorTable: [],
       pageInfo: {
         currentPage: 1,
@@ -157,6 +160,21 @@ export default defineComponent({
       if (response.data.code === 200) {
         ElMessage.success("修改成功！");
         getDoctorList();
+      }
+    };
+    /**
+     * @description 获取科室下拉
+     */
+    const getDepartment = async () => {
+      try {
+        const response = await api.department.apiGetAllAdministrative();
+        if (response.data.code === 200) {
+          state.departmentOptions = response.data.data;
+        } else {
+          ElMessage.error(response.data.msg);
+        }
+      } catch (error: any) {
+        ElMessage.error(error);
       }
     };
     /**
@@ -215,6 +233,7 @@ export default defineComponent({
     };
     onMounted(() => {
       getDoctorList();
+      getDepartment();
     });
     return {
       ...toRefs(state),

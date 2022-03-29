@@ -20,8 +20,8 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
-              <el-dropdown-item command="changePwd">修改密码</el-dropdown-item>
+              <!-- <el-dropdown-item command="userInfo">个人信息</el-dropdown-item> -->
+              <!-- <el-dropdown-item command="changePwd">修改密码</el-dropdown-item> -->
               <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -49,12 +49,12 @@ export default defineComponent({
     const router = useRouter();
     const chooseMenu = (menu: string) => {
       switch (menu) {
-        case "userInfo":
-          toUserInfoPage();
-          break;
-        case "changePwd":
-          toChangePwd();
-          break;
+        // case "userInfo":
+        //   toUserInfoPage();
+        //   break;
+        // case "changePwd":
+        //   toChangePwd();
+        //   break;
         case "loginOut":
           LoginOut();
           break;

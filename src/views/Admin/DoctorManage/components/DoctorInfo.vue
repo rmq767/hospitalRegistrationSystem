@@ -6,7 +6,7 @@
       ref="doctorFormEl"
       :rules="rules"
     >
-      <el-form-item label="医生图片：" prop="avatar">
+      <!-- <el-form-item label="医生图片：" prop="avatar">
         <el-upload
           class="avatar-uploader"
           name="pic"
@@ -18,7 +18,7 @@
           <img v-if="form.avatar" :src="form.avatar" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon"><elementPlus /></el-icon>
         </el-upload>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="账号：" prop="username">
         <el-input v-model="form.username"></el-input>
       </el-form-item>

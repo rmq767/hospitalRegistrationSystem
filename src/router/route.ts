@@ -16,18 +16,6 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
     component: () => import("@/layout/Home.vue"),
     children: [
       {
-        path: "/adminhome",
-        name: "AdminHome",
-        component: () => import("@/views/AdminHome.vue"),
-        meta: {
-          title: "首页",
-          roles: ["admin", "doctor"],
-          icon: "",
-          isHide: false,
-          permission: true,
-        },
-      },
-      {
         path: "/about",
         name: "About",
         component: () => import("@/views/About.vue"),

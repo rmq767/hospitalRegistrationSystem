@@ -117,10 +117,10 @@ export default defineComponent({
           prop: "createTime",
           label: "创建时间",
         },
-        {
-          prop: "status",
-          label: "审核状态",
-        },
+        // {
+        //   prop: "status",
+        //   label: "审核状态",
+        // },
       ],
       evaluationInfo: null,
       evaluationDialogEl: ElDialog,

@@ -61,10 +61,26 @@
     </el-card>
     <el-card>
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="name" label="患者姓名" />
-        <el-table-column prop="date" label="就诊时间"> </el-table-column>
-        <el-table-column prop="phone" label="联系方式" />
-        <el-table-column prop="desc" label="专家简介" />
+        <el-table-column prop="username" label="患者姓名" />
+        <el-table-column prop="gender" label="性别">
+          <template #default="scope">
+            <span>{{ scope.row.gender ? "男" : "女" }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="phoneNumber" label="手机号"> </el-table-column>
+        <el-table-column prop="identityCard" label="身份证" />
+        <el-table-column prop="number" label="预约排号" />
+        <el-table-column prop="sawStatus" label="就诊状态">
+          <template #default="scope">
+            <span>{{ scope.row.sawStatus ? "就诊完成" : "未就诊" }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="subscribeTime" label="预约时间" />
+        <!-- <el-table-column prop="payStatus" label="支付状态">
+          <template #default="scope">
+            <span>{{ scope.row.payStatus ? "已支付" : "未支付" }}</span>
+          </template>
+        </el-table-column> -->
         <el-table-column label="操作">
           <template #default="scope">
             <el-button
@@ -88,10 +104,12 @@
 </template>
 
 <script lang="ts">
+import api from "@/api";
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import { formatDate } from "@/utils/formatTime";
 import Pagination from "@/components/Pagination.vue";
+import { ElMessage } from "element-plus/lib/components";
 export default defineComponent({
   components: { Pagination },
   name: "WorkTimeInfo",
@@ -110,26 +128,7 @@ export default defineComponent({
         pageSize: 10,
         total: 0,
       },
-      tableData: [
-        {
-          name: "吕亚洲",
-          date: "2016-05-03",
-          phone: "123",
-          desc: "从事儿科重症工作10余年，先后到重庆医科大学、北京儿童医院学习、进修，擅长儿科呼吸系统、神经系统、消化系统及危重疑难疾病的诊治。发表国·家级论文十余篇，出版专著一部 ",
-        },
-        {
-          name: "杜清勉",
-          date: "2016-05-03",
-          phone: "1234",
-          desc: "1985年7月毕业于河南医科大学医疗系，从事儿童临床工作35年，2006年晋升为儿科主任医师。曾在天津市儿童医院进修学习一年，在省级、国·家级及核心期刊发表医学论文20篇，获市级科技进步二等奖八项，三等奖两项，著书一部。擅长儿童呼吸（长期发热、咳嗽、气喘等）、肾病综合征、过敏性紫癜、内分泌、血液、神经及小儿腹痛、腹泻、厌食等的治疗 ",
-        },
-        {
-          name: "高华",
-          date: "2016-05-03",
-          phone: "12367",
-          desc: "擅长治疗儿童常见病多发病。尤其对儿童各种类型癫痫，抽动障碍，发育迟缓，各种脑损伤（新生儿缺血缺氧性脑病，早产低体重，头外伤，各种脑炎）的评估与干预指导，遗传代谢病，反复呼吸道感染，慢性咳嗽，儿童支气管哮喘有比较深入的研究。",
-        },
-      ],
+      tableData: [],
       typeOptions: [
         {
           label: "未就诊",
@@ -145,6 +144,26 @@ export default defineComponent({
         },
       ],
     });
+
+    /**
+     * @description 获取病人列表
+     */
+    const getUserList = async () => {
+      const params = {
+        ...state.pageInfo,
+      };
+      try {
+        const response = await api.user.apiGetUserList(params);
+        if (response.data.code === 200) {
+          state.tableData = response.data.data.records;
+          state.pageInfo.total = response.data.data.total;
+        } else {
+          ElMessage.error(response.data.msg);
+        }
+      } catch (error: any) {
+        ElMessage.error(error);
+      }
+    };
     /**
      * @description 获取今天日期或者日历跳转日期
      */
@@ -168,6 +187,7 @@ export default defineComponent({
     };
     onMounted(() => {
       getDay();
+      getUserList();
     });
     return {
       ...toRefs(state),

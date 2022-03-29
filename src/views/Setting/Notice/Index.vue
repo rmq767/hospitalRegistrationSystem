@@ -84,7 +84,7 @@ interface notice {
   content: string;
 }
 export default defineComponent({
-  name: "SettingDepartment",
+  name: "SettingNotice",
   components: {
     Dialog,
   },

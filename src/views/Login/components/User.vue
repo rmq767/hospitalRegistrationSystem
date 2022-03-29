@@ -108,7 +108,11 @@ export default defineComponent({
            * @description 添加动态路由
            */
           await initFrontEndControlRoutes();
-          router.push("/adminhome");
+          if (state.ruleForm.role === "admin") {
+            router.push("/admin/doctor");
+          } else {
+            router.push("/doctor/worktime/info");
+          }
           ElMessage.success("登录成功！");
         } else if (user.includes(state.ruleForm.role)) {
           Session.set("userInfo", info);
