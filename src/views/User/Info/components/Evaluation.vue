@@ -3,32 +3,14 @@
     <el-form :model="form" label-width="100px">
       <el-form-item label="评价类型：">
         <el-radio-group v-model="form.type">
-          <el-radio label="1">表扬</el-radio>
-          <el-radio label="2">建议</el-radio>
-          <el-radio label="3">投诉</el-radio>
+          <el-radio label="表扬">表扬</el-radio>
+          <el-radio label="建议">建议</el-radio>
+          <el-radio label="投诉">投诉</el-radio>
         </el-radio-group>
-      </el-form-item>
-      <el-form-item label="医生评价：">
-        <el-rate
-          v-model="form.doctor"
-          :colors="colors"
-          :texts="texts"
-          show-text
-        >
-        </el-rate>
-      </el-form-item>
-      <el-form-item label="医院评价：">
-        <el-rate
-          v-model="form.hospital"
-          :colors="colors"
-          :texts="texts"
-          show-text
-        >
-        </el-rate>
       </el-form-item>
       <el-form-item label="建议：">
         <el-input
-          v-model="form.advice"
+          v-model="form.content"
           type="textarea"
           placeholder="您有什么宝贵的意见，都可以说哦"
           :rows="4"
@@ -37,7 +19,7 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button @click="close">取消</el-button>
         <el-button type="primary" @click="onSubmit">评价</el-button>
       </span>
     </template>
@@ -48,16 +30,13 @@
 import { defineComponent, reactive, ref, toRefs } from "vue";
 export default defineComponent({
   name: "Evaluation",
-  setup() {
-    const colors = ref(["#99A9BF", "#F7BA2A", "#FF9900"]);
-    const texts = ref(["很差", "差", "一般", "好", "很好"]);
+  emits: ["submit"],
+  setup(props, { emit }) {
     const state = reactive({
       dialogFormVisible: false,
       form: {
-        type: "1",
-        doctor: null,
-        hospital: null,
-        advice: "",
+        type: "",
+        content: "",
       },
     });
     const open = () => {
@@ -65,12 +44,16 @@ export default defineComponent({
     };
     const close = () => {
       state.dialogFormVisible = false;
+      state.form = {
+        type: "",
+        content: "",
+      };
     };
     const onSubmit = () => {
-      console.log(state.form);
+      emit("submit", state.form);
       close();
     };
-    return { ...toRefs(state), colors, texts, onSubmit, open };
+    return { ...toRefs(state), onSubmit, open, close };
   },
 });
 </script>

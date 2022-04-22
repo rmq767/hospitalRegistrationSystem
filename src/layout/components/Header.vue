@@ -2,25 +2,21 @@
   <el-header>
     <div class="header">
       <h2 class="title">医院挂号系统</h2>
-      <div class="aside">
-        <Aside
-          mode="horizontal"
-          width="100%"
-          style="box-shadow: none"
-          v-if="isUser"
-        ></Aside>
-      </div>
+      <div class="aside"></div>
       <div class="user">
         <el-avatar
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
         ></el-avatar>
+        <span>{{ userName }}</span>
         <el-dropdown trigger="click" @command="chooseMenu">
           <span class="el-dropdown-link">
             <el-icon class="el-icon--right"><arrow-down /></el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <!-- <el-dropdown-item command="userInfo">个人信息</el-dropdown-item> -->
+              <el-dropdown-item command="userInfo" v-if="roles === 'doctor'"
+                >个人信息</el-dropdown-item
+              >
               <!-- <el-dropdown-item command="changePwd">修改密码</el-dropdown-item> -->
               <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -38,20 +34,18 @@ import { useRouter } from "vue-router";
 import { Session } from "@/utils/session";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { resetRoute } from "@/router/index";
-import Aside from "./Aside.vue";
 export default defineComponent({
   name: "Header",
   components: {
     ArrowDown,
-    Aside,
   },
   setup() {
     const router = useRouter();
     const chooseMenu = (menu: string) => {
       switch (menu) {
-        // case "userInfo":
-        //   toUserInfoPage();
-        //   break;
+        case "userInfo":
+          toUserInfoPage();
+          break;
         // case "changePwd":
         //   toChangePwd();
         //   break;
@@ -60,20 +54,20 @@ export default defineComponent({
           break;
       }
     };
-    const isUser = computed(() => {
-      return Session.get("userInfo").roles === "user";
+    const userName = computed(() => {
+      return Session.get("userInfo").username;
+    });
+    const roles = computed(() => {
+      return Session.get("userInfo").roles;
     });
     /**
      * @description 跳转个人信息
      */
     const toUserInfoPage = () => {
-      const role = Session.get("userInfo").roles[0];
-      const id = "123";
+      const role = Session.get("userInfo").roles;
+      const id = Session.get("userInfo").id;
       let routerName = "";
       switch (role) {
-        case "user":
-          routerName = "UserInfo";
-          break;
         case "doctor":
           routerName = "DoctorInfo";
           break;
@@ -104,7 +98,7 @@ export default defineComponent({
         })
         .catch(() => {});
     };
-    return { chooseMenu, isUser };
+    return { chooseMenu, userName, toUserInfoPage, roles };
   },
 });
 </script>

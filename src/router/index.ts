@@ -197,7 +197,10 @@ router.beforeEach(async (to, from, next) => {
   NProgress.configure({ showSpinner: false });
   if (to.meta.title) NProgress.start();
   const token = Session.get("token");
-  const role = Session.get("userInfo") && Session.get("userInfo").roles[0];
+  const role = Session.get("userInfo") && Session.get("userInfo").roles;
+  if (role) {
+    store.dispatch("setUserInfos");
+  }
   const permission = to.meta.permission;
   if (permission) {
     if (!token || !role) {

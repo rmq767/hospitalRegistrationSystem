@@ -17,8 +17,8 @@
       </el-form>
     </el-card>
     <el-card>
-      <div class="mb20">
-        <el-button type="primary" @click="addNotice">新增公告</el-button>
+      <div class="mb20" style="text-align: center;">
+        <el-button type="primary" @click="addNotice">发布系统公告</el-button>
       </div>
       <el-table :data="noticeTable">
         <el-table-column
@@ -112,7 +112,7 @@ export default defineComponent({
           label: "公告内容",
         },
         {
-          prop: "adminId",
+          prop: "adminName",
           label: "创建人",
         },
         {
@@ -120,6 +120,7 @@ export default defineComponent({
           label: "创建时间",
         },
       ],
+      // noticeInfo: null,
       noticeInfo: null,
       noticeDialogEl: ElDialog,
     });
@@ -127,6 +128,9 @@ export default defineComponent({
      * @description 获取adminID
      */
     const adminID = computed(() => {
+      return Session.get("userInfo").id;
+    });
+    const adminName = computed(() => {
       return Session.get("userInfo").username;
     });
     /**
@@ -171,6 +175,7 @@ export default defineComponent({
     const submitForm = async (data: any) => {
       let { isEdit, form } = data;
       form.adminId = adminID;
+      form.adminName = adminName;
       if (isEdit) {
         editNoticeForm(form);
       } else {
@@ -211,6 +216,8 @@ export default defineComponent({
     };
     const addNotice = () => {
       state.noticeInfo = null;
+      // state.noticeInfo.adminId = Session.get("userInfo").id;
+      // state.noticeInfo.adminName = Session.get("userInfo").username;
       state.noticeDialogEl.open();
     };
     const editNotice = (row: any) => {

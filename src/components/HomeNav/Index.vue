@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts">
+import { Session } from "@/utils/session";
 import { defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
@@ -56,10 +57,10 @@ export default defineComponent({
           name: "新闻动态",
           isSubShow: false,
           subItems: [
-            {
-              name: "附院要闻",
-              path: "/hospital/news",
-            },
+            // {
+            //   name: "附院要闻",
+            //   path: "/hospital/news",
+            // },
             {
               name: "医院公告",
               path: "/hospital/notice",
@@ -77,16 +78,12 @@ export default defineComponent({
           isSubShow: false,
           subItems: [
             {
-              name: "门诊时间",
-              path: "/hospital/time",
-            },
-            {
               name: "预约挂号",
               path: "/doctor/search",
             },
             {
               name: "我的挂号",
-              path: "/user/registration/:id",
+              path: `/user/registration`,
             },
             {
               name: "修改密码",
@@ -103,7 +100,6 @@ export default defineComponent({
       item.isSubShow = false;
     };
     const toPage = (path: string) => {
-      console.log(path);
       path && router.push(path);
     };
     return { ...toRefs(state), selectStyle, outStyle, toPage };

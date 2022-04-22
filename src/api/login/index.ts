@@ -8,7 +8,7 @@ export default {
    */
   apiAdminLogin(data: object) {
     return request({
-      url: "/admin/adminLogin",
+      url: "/admin/Login",
       method: "post",
       data,
     });

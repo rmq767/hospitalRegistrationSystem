@@ -5,6 +5,7 @@ import { ElLoading, ElMessage } from "element-plus";
 //创建axios的一个实例
 var instance = axios.create({
   baseURL: "http://192.168.101.13:10001/api", //接口统一域名
+  // baseURL: "http://localhost:10001/api", //接口统一域名
   timeout: 6000, //设置超时
 });
 let loading: any;
@@ -89,8 +90,10 @@ instance.interceptors.response.use(
           message = "请求失败";
       }
       ElMessage.error(message);
+      hideLoading();
       return Promise.reject(error);
     }
+    hideLoading();
     return Promise.reject(error);
   }
 );

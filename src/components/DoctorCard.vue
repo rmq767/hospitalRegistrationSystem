@@ -8,13 +8,12 @@
     </div>
     <div class="doctor-info">
       <p>
-        <span class="name">张先勇</span>
-        <span class="type">专家</span>
+        <span class="name">{{ data.username }}</span>
+        <span class="type">{{ data.doctorRank }}</span>
       </p>
-      <p class="rank">博士研究生 检验科</p>
+      <p class="rank">{{ data.administrativeName }}</p>
       <div class="handle">
-        <el-button type="primary" size="mini" @click="toPage">详情</el-button>
-        <el-button type="warning" size="mini">预约</el-button>
+        <el-button type="primary" @click="toPage">详情</el-button>
       </div>
     </div>
   </el-card>
@@ -25,10 +24,23 @@ import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
   name: "DoctorCard",
-  setup() {
+  props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {
+          avatar: "",
+          username: "医生",
+          doctorRank: "普通医生",
+          administrativeName: "院校",
+        };
+      },
+    },
+  },
+  setup(props) {
     const router = useRouter();
     const toPage = () => {
-      router.push(`/hospital/doctor/info/${1}`);
+      router.push(`/hospital/doctor/info/${props.data.id}`);
     };
     return { toPage };
   },

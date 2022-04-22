@@ -7,7 +7,7 @@
         :inline="true"
         ref="ruleFormRef"
       >
-        <el-form-item label="科室名称：" prop="id">
+        <!-- <el-form-item label="科室名称：" prop="id">
           <el-select v-model="filterForm.id" clearable filterable>
             <el-option
               v-for="item in departmentOptions"
@@ -17,7 +17,13 @@
             >
             </el-option>
           </el-select>
+        </el-form-item> -->
+
+        <el-form-item label="科室名称：">
+          <el-input v-model="filterForm.name"></el-input>
         </el-form-item>
+
+
         <el-form-item>
           <el-button type="primary" @click="onSubmit">筛选</el-button>
           <el-button @click="onReset(ruleFormRef)">重置</el-button>
@@ -91,6 +97,7 @@ export default defineComponent({
     const state = reactive({
       filterForm: {
         id: "",
+        name: '',
       },
       departmentOptions: [],
       departmentTable: [],
@@ -166,6 +173,7 @@ export default defineComponent({
      * @description 重置
      */
     const onReset = (formEl: FormInstance | undefined) => {
+      
       if (!formEl) return;
       formEl.resetFields();
       getDepartmentList();

@@ -10,7 +10,7 @@
           </div>
           <div v-else>
             <h3 class="login-title">用户注册</h3>
-            <UserRegister />
+            <UserRegister @success="registerSuccess" />
           </div>
         </transition>
         <div class="other" @click="toRegister">
@@ -42,10 +42,16 @@ export default defineComponent({
     const toRegister = () => {
       isRegister.value = !isRegister.value;
     };
+    /**
+     * @description 注册成功
+     */
+    const registerSuccess = () => {
+      isRegister.value = false;
+    };
     const toHome = () => {
       router.push("/");
     };
-    return { toRegister, isRegister, toHome };
+    return { toRegister, isRegister, toHome, registerSuccess };
   },
 });
 </script>
@@ -54,8 +60,7 @@ export default defineComponent({
 .login-container {
   width: 100%;
   height: 100%;
-  background: url("https://gitee.com/lyt-top/vue-next-admin-images/raw/master/login/bg-login.png")
-    no-repeat;
+  background: url("../../assets/bg.jpg") no-repeat;
   background-size: 100% 100%;
   .login-content {
     width: 500px;
@@ -70,6 +75,7 @@ export default defineComponent({
     transition: height 0.2s linear;
     overflow: hidden;
     z-index: 1;
+    backdrop-filter: blur(4px);
     .login-content-main {
       margin: 0 auto;
       width: 80%;

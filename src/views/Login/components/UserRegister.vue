@@ -1,10 +1,15 @@
 <template>
-  <el-form class="login-content-form" :model="ruleForm" :rules="rules">
-    <el-form-item prop="userName">
+  <el-form
+    class="login-content-form"
+    :model="ruleForm"
+    :rules="rules"
+    ref="ruleFormRef"
+  >
+    <el-form-item prop="username">
       <el-input
         type="text"
         placeholder="姓名"
-        v-model="ruleForm.userName"
+        v-model="ruleForm.username"
         clearable
         autocomplete="off"
       >
@@ -13,17 +18,21 @@
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item prop="id">
-      <el-input placeholder="身份证号" v-model="ruleForm.id" autocomplete="off">
+    <el-form-item prop="identityCard">
+      <el-input
+        placeholder="身份证号"
+        v-model="ruleForm.identityCard"
+        autocomplete="off"
+      >
         <template #prefix>
           <el-icon class="el-input__icon"><elementUnlock /></el-icon>
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item prop="phone">
+    <el-form-item prop="phoneNumber">
       <el-input
         placeholder="手机号"
-        v-model="ruleForm.phone"
+        v-model="ruleForm.phoneNumber"
         autocomplete="off"
       >
         <template #prefix>
@@ -31,11 +40,21 @@
         </template>
       </el-input>
     </el-form-item>
+
+    <el-form-item label="性别" prop="gender">
+      <el-select v-model="ruleForm.gender" placeholder="性别">
+        <el-option label="女" value="0" />
+        <el-option label="男" value="1" />
+        <el-option label="保密" value="2" />
+      </el-select>
+    </el-form-item>
+
     <el-form-item prop="password">
       <el-input
         placeholder="密码"
         v-model="ruleForm.password"
         autocomplete="off"
+        type="password"
       >
         <template #prefix>
           <el-icon class="el-input__icon"><elementUnlock /></el-icon>
@@ -47,6 +66,7 @@
         placeholder="确认密码"
         v-model="ruleForm.passwordAgain"
         autocomplete="off"
+        type="password"
       >
         <template #prefix>
           <el-icon class="el-input__icon"><elementUnlock /></el-icon>
@@ -81,8 +101,7 @@
         type="primary"
         class="login-content-submit"
         round
-        @click="onSignIn"
-        :loading="loading.signIn"
+        @click="onSignIn(ruleFormRef)"
       >
         <span>注 册</span>
       </el-button>
@@ -91,39 +110,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { userRegisterForm } from "../../../utils/rules/formRulesRegister";
-// import VerifyCode from "@/components/VerifyCode.vue";
+import { ElDialog, ElMessage, FormInstance } from "element-plus";
+import { defineComponent, reactive, ref, toRefs } from "vue";
+import { userRegisterForm } from "@/utils/rules/formRulesRegister";
+import api from "@/api/index";
 export default defineComponent({
   name: "LoginUserRegister",
-  // components: {
-  //   VerifyCode,
-  // },
-  setup() {
-    const { proxy } = getCurrentInstance() as any;
-    const store = useStore();
-    const route = useRoute();
-    const router = useRouter();
+  emits: ["success"],
+  setup(props, { emit }) {
+    const ruleFormRef = ref<FormInstance>();
     const state = reactive({
       isShowPassword: false,
       form: "",
       ruleForm: {
-        userName: "",
-        id: "",
-        phone: "",
+        username: "",
+        identityCard: "",
+        phoneNumber: "",
         password: "",
         passwordAgain: "",
-        // code: "5642",
-      },
-      loading: {
-        signIn: false,
+        gender: "",
       },
     });
     const rules = userRegisterForm;
-    const onSignIn = () => {};
-    return { ...toRefs(state), onSignIn, rules };
+    const onSignIn = async (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      await formEl.validate(async (valid, fields) => {
+        if (valid) {
+          const response = await api.user.apiUserRegister(state.ruleForm);
+          if (response.data.code === 200) {
+            ElMessage.success("注册成功！");
+            ruleFormRef.value?.resetFields();
+            emit("success");
+          }
+        } else {
+        }
+      });
+    };
+    return { ...toRefs(state), onSignIn, rules, ruleFormRef };
   },
 });
 </script>

@@ -2,38 +2,38 @@
   <div class="notice-detail">
     <h2>{{ notice.title }}</h2>
     <p>
-      <span>{{ notice.time }}</span>
+      <span>{{ formatDate(notice.createTime) }}</span>
     </p>
     <article v-html="notice.content"></article>
+    <div class="publish">发布人员：{{ notice.adminName }}</div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import api from "@/api";
+import mixin from "@/mixin";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import { useRoute } from "vue-router";
 export default defineComponent({
   name: "HospitalNewsDetail",
+  mixins: [mixin],
   setup() {
     const state = reactive({
-      notice: {
-        title: "我院召开迎新春知识分子和各界人士代表座谈会",
-        time: "发布时间：2022-01-25 ",
-        content: `
-        <p>
-          <span>1月21日下午，我院召开迎新春知识分子和各界人士代表座谈会。院长陈建勋同志主持会议，院党委书记田巨龙同志、副院长樊涛同志、副院长包家新同志、副院长卿丽华同志、副院长任楷同志出席。院内知识分子代表、青年代表、民主党派和无党派人士代表及相关职能部门负责人共60余人参加座谈。 </span> 
-        </p>
-        <p>
-          <span><img src="https://www.pdfy999.com/Uploads/Editor/2022-01-25/61efbe48bc8ac.png" width="800" height="575" alt="" /><br />
-          </span> 
-        </p>
-        `,
-      },
+      notice: {},
     });
     const route = useRoute();
-    const id = computed(() => {
-      return route.params.id;
+    /**
+     * @description 获取新闻详情
+     */
+    const getNewsById = async () => {
+      let id = route.params.id as string;
+      const response = await api.notice.apiGetAnnouncementById(id);
+      state.notice = response.data.data;
+    };
+    onMounted(() => {
+      getNewsById();
     });
-    return { id, ...toRefs(state) };
+    return { ...toRefs(state) };
   },
 });
 </script>
@@ -61,6 +61,11 @@ export default defineComponent({
       display: block;
       margin: 0 auto;
     }
+  }
+  .publish {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
 }
 </style>

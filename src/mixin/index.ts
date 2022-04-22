@@ -4,6 +4,7 @@ const baseMixin = {
   data() {
     return {
       uploadUrl: "http://192.168.101.13:10001/api/images/upload",
+      // uploadUrl: "http://localhost:10001/api/images/upload",
     };
   },
   methods: {

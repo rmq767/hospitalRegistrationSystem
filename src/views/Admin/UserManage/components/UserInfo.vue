@@ -16,8 +16,8 @@
       <el-form-item label="手机号：" prop="phoneNumber">
         <el-input v-model="form.phoneNumber"></el-input>
       </el-form-item>
-      <el-form-item label="身份证号：" prop="id">
-        <el-input v-model="form.id"></el-input>
+      <el-form-item label="身份证号：" prop="identityCard">
+        <el-input v-model="form.identityCard"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -39,6 +39,7 @@ interface Info {
   id: number;
   status: number;
   gender: number;
+  identityCard: string;
 }
 export default defineComponent({
   name: "UserInfo",
@@ -52,7 +53,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const state = reactive({
       dialogFormVisible: false,
-      dialogTitle: "",
+      dialogTitle: "新增患者信息",
       isEdit: false,
       form: {} as Info,
       userFormEl: ElForm,

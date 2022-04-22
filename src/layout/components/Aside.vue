@@ -7,22 +7,23 @@
         :default-active="defaultActive"
         background-color="transparent"
       >
-        <template v-for="val in menuList">
+        <template v-for="val in menuList" >
           <el-sub-menu
             :index="val.path"
             v-if="val.children && val.children.length > 0"
             :key="val.path"
+            class="metatitles"
           >
             <template #title>
               <!-- <SvgIcon :name="val.meta.icon" /> -->
-              <span>{{ val.meta.title }}</span>
+              <span class="metaone1">{{ val.meta.title }}</span>
             </template>
             <SubItem :chil="val.children" />
           </el-sub-menu>
           <el-menu-item :index="val.path" :key="val.path" v-else>
             <!-- <SvgIcon :name="val.meta.icon" /> -->
             <template #title>
-              <span>{{ val.meta.title }}</span>
+              <span class="metaone2">{{ val.meta.title }}</span>
             </template>
           </el-menu-item>
         </template>
@@ -108,5 +109,15 @@ export default defineComponent({
     border-right: 0;
     background-color: var(--el-color-white);
   }
+}
+
+.metatitles{
+  
+  // background: #263939;
+  color: rgb(248, 246, 246);
+}
+.metaone1 .metaone2{
+      font-size: 120%;
+  // color: rgba(254,254,254,.65);
 }
 </style>

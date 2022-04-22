@@ -23,21 +23,18 @@
           </el-carousel>
         </div>
         <div class="news-list">
-          <NewsList :title="['医院公告', '医院新闻']" @getIndex="getNewsIndex">
+          <NewsList :title="['医院公告']">
             <template #content>
-              <div
-                class="news-list-content"
-                v-for="(value, key) in newsData"
-                :key="key"
-                v-show="whichKey === key"
-              >
+              <div class="news-list-content">
                 <p
                   class="news-item"
-                  v-for="(item, index) in value"
+                  v-for="(item, index) in noticeList"
                   :key="index"
                 >
                   <span class="news-title"><em>•</em> {{ item.title }}</span>
-                  <span class="news-date">{{ item.date }}</span>
+                  <span class="news-date">{{
+                    formatTime(item.createTime)
+                  }}</span>
                 </p>
               </div>
             </template>
@@ -57,17 +54,10 @@
               }"
               :loop="true"
             >
-              <swiper-slide v-for="item in 15" :key="item">
-                <DoctorCard class="mt20"></DoctorCard>
+              <swiper-slide v-for="item in doctorList" :key="item.id">
+                <DoctorCard class="mt20" :data="item"></DoctorCard>
               </swiper-slide>
             </swiper>
-            <!-- <div class="doctor-list">
-              <DoctorCard
-                class="mt20"
-                v-for="item in 5"
-                :key="item"
-              ></DoctorCard>
-            </div> -->
           </template>
         </NewsList>
       </section>
@@ -80,21 +70,13 @@
                 alt=""
                 class="department-img"
               />
-              <el-tabs v-model="activeName" stretch>
-                <el-tab-pane
-                  v-for="item in department"
-                  :key="item.name"
-                  :label="item.name"
-                  :name="item.name"
-                >
-                  <div class="department-content">
-                    <p v-for="(sub, index) in item.sub" :key="index">
-                      <el-icon><elementCaretRight /></el-icon
-                      ><span>{{ sub }}</span>
-                    </p>
-                  </div>
-                </el-tab-pane>
-              </el-tabs>
+
+              <div class="department-content">
+                <p v-for="department in departmentList" :key="department.id">
+                  <el-icon><elementCaretRight /></el-icon
+                  ><span>{{ department.name }}</span>
+                </p>
+              </div>
             </div>
           </template>
         </NewsList>
@@ -121,7 +103,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import NewsHeader from "@/components/News/NewsHeader.vue";
 import DoctorCard from "@/components/DoctorCard.vue";
 import NewsList from "@/components/News/NewsList.vue";
@@ -130,6 +112,8 @@ import SwiperCore, { Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue/swiper-vue";
 // Import Swiper styles
 import "swiper/swiper.min.css";
+import api from "@/api";
+import { formatDate } from "@/utils/formatTime";
 SwiperCore.use([Autoplay]);
 export default defineComponent({
   name: "Hospital",
@@ -154,55 +138,9 @@ export default defineComponent({
         "https://www.pdfy999.com/Uploads/Picture/2021-12-08/61aff8a32cdf6.png",
         "https://www.pdfy999.com/Uploads/Picture/2021-11-30/61a5d6727bbea.png",
       ],
-      newsData: {
-        noticeList: [
-          {
-            title: "2022年住院医师规范化培训招生简章",
-            date: "2021-12-27",
-          },
-          {
-            title: "攀大附院2022年规培护士招生简章",
-            date: "2021-12-27",
-          },
-          {
-            title: "攀枝花学院附属医院检验技师招聘公告",
-            date: "2021-12-27",
-          },
-          {
-            title: "攀枝花学院附属医院招聘启事",
-            date: "2021-12-27",
-          },
-          {
-            title: "攀枝花学院附属医院招聘启事",
-            date: "2021-12-27",
-          },
-        ],
-        newsList: [
-          {
-            title: `追剧《火红年华》，传承“三线精神”，攀大附院举行大型义诊活动`,
-            date: "2021-12-27",
-          },
-          {
-            title:
-              "四川省推进中医药强省建设工作领导小组副组长，省中医药管理局党组书记、局长田兴军莅临我院调研指导工作",
-            date: "2021-12-27",
-          },
-          {
-            title:
-              "诊问题，解难题，同担当，助发展，市卫健委党政领导莅临我院调研指导",
-            date: "2021-12-27",
-          },
-          {
-            title:
-              "牵手德昌—攀大附院联盟医院暨眼科专家工作站在德昌县中医医院挂牌",
-            date: "2021-12-27",
-          },
-          {
-            title: "牵手宁蒗—攀大附院联盟医院在宁蒗县中医医院挂牌",
-            date: "2021-12-27",
-          },
-        ],
-      },
+
+      noticeList: [],
+
       department: [
         {
           name: "内科系统",
@@ -285,17 +223,51 @@ export default defineComponent({
         "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb5597595.jpg",
         "",
       ],
+      doctorList: [],
+      departmentList: [],
       active: 0,
       activeName: "内科系统",
     });
-    const getNewsIndex = (index: number) => {
-      state.active = index;
+    /**
+     * @description 获取首页公告
+     */
+    const getNoticeList = async () => {
+      const params = {
+        currentPage: 1,
+        pageSize: 5,
+      };
+      const response = await api.notice.apiGetAnnouncementList(params);
+      state.noticeList = response.data.data.records;
     };
-    const whichKey = computed(() => {
-      let dataKeys = Object.keys(state.newsData);
-      return dataKeys[state.active];
+    /**
+     * @description 获取首页医生
+     */
+    const getDoctorList = async () => {
+      const params = {
+        currentPage: 1,
+        pageSize: 10,
+      };
+      const response = await api.doctor.apiGetDoctorList(params);
+      state.doctorList = response.data.data.records;
+    };
+    /**
+     * @description 获取科室
+     */
+    const getDepartmentList = async () => {
+      const response = await api.department.apiGetAllAdministrative();
+      state.departmentList = response.data.data;
+    };
+
+    const formatTime = (date: number) => {
+      return formatDate(new Date(date), "YYYY-mm-dd");
+    };
+
+    onMounted(() => {
+      getNoticeList();
+      getDoctorList();
+      getDepartmentList();
     });
-    return { ...toRefs(state), whichKey, getNewsIndex };
+    return { ...toRefs(state), formatTime };
   },
 });
 </script>
@@ -367,6 +339,7 @@ export default defineComponent({
     .department-info {
       margin-top: 20px;
       display: flex;
+      align-items: flex-start;
       .department-img {
         margin-right: 20px;
       }
@@ -375,7 +348,7 @@ export default defineComponent({
       display: flex;
       flex-wrap: wrap;
       > p {
-        flex-basis: 20%;
+        // flex-basis: 20%;
         font-size: 18px;
         cursor: pointer;
         margin: 10px;

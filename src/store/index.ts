@@ -15,6 +15,9 @@ export default createStore({
     getRoutesList(state: any, data: Array<object>) {
       state.routesList = data;
     },
+    clearUserInfos(state) {
+      state.userInfos = {};
+    },
   },
   actions: {
     // 设置用户信息

@@ -13,22 +13,15 @@ const validateId = (rule: any, value: string, cb: Function) => {
 };
 
 export const userRegisterForm = reactive({
-  userName: [
+  username: [
     {
       required: true,
       message: "请输入姓名",
       trigger: "blur",
     },
   ],
-  id: [
-    // {
-    //   required: true,
-    //   message: "请输入身份证",
-    //   trigger: "blur",
-    // },
-    { validator: validateId, trigger: "blur" },
-  ],
-  phone: [
+  identityCard: [{ validator: validateId, trigger: "blur" }],
+  phoneNumber: [
     {
       required: true,
       message: "请输入姓名",
@@ -46,13 +39,6 @@ export const userRegisterForm = reactive({
     {
       required: true,
       message: "请确认密码",
-      trigger: "blur",
-    },
-  ],
-  code: [
-    {
-      required: true,
-      message: "请输入验证码",
       trigger: "blur",
     },
   ],

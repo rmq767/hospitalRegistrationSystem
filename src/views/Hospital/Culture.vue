@@ -78,7 +78,6 @@ export default defineComponent({
         "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb5fbd286.jpg",
         "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb244c0c5.jpg",
         "https://www.pdfy999.com/Uploads/Picture/2018-07-24/5b56cb5597595.jpg",
-        "",
       ],
     });
     // onMounted(() => {

@@ -6,7 +6,7 @@
       ref="doctorFormEl"
       :rules="rules"
     >
-      <!-- <el-form-item label="医生图片：" prop="avatar">
+      <el-form-item label="医生图片：" prop="avatar">
         <el-upload
           class="avatar-uploader"
           name="pic"
@@ -18,7 +18,7 @@
           <img v-if="form.avatar" :src="form.avatar" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon"><elementPlus /></el-icon>
         </el-upload>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="账号：" prop="username">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
@@ -40,6 +40,17 @@
           <el-radio :label="0"> 女 </el-radio>
           <el-radio :label="1"> 男 </el-radio>
         </el-radio-group>
+      </el-form-item>
+      <el-form-item label="科室：" prop="administrativeName">
+        <el-select v-model="form.administrativeId">
+          <el-option
+            v-for="item in administratives"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="级别：" prop="doctorRank">
         <el-select v-model="form.doctorRank">
@@ -78,7 +89,7 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="resetForm">取消</el-button>
+        <el-button @click="resetForm(doctorFormEl)">取消</el-button>
         <el-button type="primary" @click="onSubmit(doctorFormEl)"
           >确认</el-button
         >
@@ -88,9 +99,18 @@
 </template>
 
 <script lang="ts">
-import { ElForm, UploadFile } from "element-plus";
+import api from "@/api/index";
+import { ElForm, UploadFile, ElMessage } from "element-plus";
 import mixin from "@/mixin";
-import { defineComponent, reactive, toRefs, watch } from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  watch,
+  onMounted,
+  getCurrentInstance,
+  nextTick,
+} from "vue";
 import formRules from "@/utils/rules/doctorManageRules";
 interface InfoForm {
   avatar: string;
@@ -102,6 +122,8 @@ interface InfoForm {
   workTime: number;
   phoneNumber: string;
   introduction: string;
+  administrativeId: string;
+  administrativeName: string;
 }
 export default defineComponent({
   name: "DoctorInfo",
@@ -118,13 +140,43 @@ export default defineComponent({
       dialogFormVisible: false,
       dialogTitle: "",
       isEdit: false,
-      form: {} as InfoForm,
+      form: {
+        avatar: "",
+        username: "",
+        password: "",
+        gender: 1,
+        doctorRank: "普通医生",
+        graduateInstitutions: "",
+        workTime: 0,
+        phoneNumber: "",
+        introduction: "",
+        administrativeId: "",
+        administrativeName: "",
+      } as InfoForm,
       doctorFormEl: ElForm,
       rules: formRules,
       rank: ["普通医生", "专家", "主任"],
+      administratives: [],
     });
-    const resetForm = () => {
+    const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
       close();
+    };
+    /**
+     * @description 获取科室下拉
+     */
+    const getDepartment = async () => {
+      try {
+        const response = await api.department.apiGetAllAdministrative();
+        if (response.data.code === 200) {
+          state.administratives = response.data.data;
+        } else {
+          ElMessage.error(response.data.msg);
+        }
+      } catch (error: any) {
+        ElMessage.error(error);
+      }
     };
     const onSubmit = (formEl: InstanceType<typeof ElForm> | undefined) => {
       if (!formEl) return;
@@ -143,39 +195,31 @@ export default defineComponent({
     };
     const close = () => {
       state.dialogFormVisible = false;
-      state.doctorFormEl.resetFields();
     };
     watch(
       () => props.info,
       (newValue) => {
-        if (newValue) {
+        if (Object.keys(newValue).length) {
           state.dialogTitle = "编辑医生信息";
           state.isEdit = true;
-          state.form = newValue as InfoForm;
+          nextTick(() => {
+            state.form = newValue as InfoForm;
+          });
         } else {
           state.dialogTitle = "新增医生信息";
           state.isEdit = false;
-          state.form = {} as InfoForm;
+          nextTick(() => {
+            state.doctorFormEl.resetFields();
+          });
         }
       }
-      // {
-      //   immediate: true,
-      //   deep: true,
-      // }
     );
     const handleAvatarSuccess = (res: any, file: UploadFile) => {
       state.form.avatar = res.data;
     };
-    // onMounted(() => {
-    //   state.form = (props.info as Info)
-    //     ? (props.info as Info)
-    //     : {
-    //         name: "",
-    //         age: 18,
-    //         username: "",
-    //       };
-    //   console.log(state.form);
-    // });
+    onMounted(() => {
+      getDepartment();
+    });
     return {
       ...toRefs(state),
       resetForm,

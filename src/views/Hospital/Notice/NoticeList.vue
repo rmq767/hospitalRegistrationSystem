@@ -16,7 +16,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import api from "@/api";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import NewsItem from "@/components/NewsItem/Index.vue";
 
 export default defineComponent({
@@ -26,45 +27,37 @@ export default defineComponent({
   },
   setup() {
     const state = reactive({
-      noticeList: [
-        {
-          id: 1,
-          title: "我院召开迎新春知识分子和各界人士代表座谈会",
-          time: "2022-01-25 17:11:00",
-          view: 123,
-        },
-        {
-          id: 2,
-          title: "我院召开迎新春知识分子和各界人士代表座谈会",
-          time: "2022-01-25 17:11:00",
-          view: 123,
-        },
-        {
-          id: 3,
-          title: "我院召开迎新春知识分子和各界人士代表座谈会",
-          time: "2022-01-25 17:11:00",
-          view: 123,
-        },
-        {
-          id: 4,
-          title: "我院召开迎新春知识分子和各界人士代表座谈会",
-          time: "2022-01-25 17:11:00",
-          view: 123,
-        },
-      ],
+      noticeList: [],
       pageInfo: {
         currentPage: 1,
         pageSize: 10,
         total: 0,
       },
     });
+    /**
+     * @description 获取公告列表
+     */
+    const getNoticeList = async () => {
+      const params = {
+        ...state.pageInfo,
+      };
+      const response = await api.notice.apiGetAnnouncementList(params);
+      state.noticeList = response.data.data.records;
+      state.pageInfo.total = response.data.data.total;
+    };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
+      getNoticeList();
     };
     const handleSizeChange = (pageSize: number) => {
       state.pageInfo.pageSize = pageSize;
       state.pageInfo.currentPage = 1;
+      getNoticeList();
     };
+
+    onMounted(() => {
+      getNoticeList();
+    });
     return { ...toRefs(state), handleCurrentChange, handleSizeChange };
   },
 });

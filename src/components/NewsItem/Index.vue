@@ -3,12 +3,12 @@
     <div class="news-item">
       <div class="content">
         <h3>{{ news.title }}</h3>
-        <p v-if="news.content">{{ news.content }}</p>
+        <p class="content-info" v-if="news.content" v-html="news.content"></p>
       </div>
       <div class="info">
         <p>
           <span>发布时间：</span>
-          <span>{{ news.time }}</span>
+          <span>{{ formatTime(news.createTime) }}</span>
         </p>
       </div>
       <div class="handle">
@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts">
+import { formatDate } from "@/utils/formatTime";
 import { defineComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
 export default defineComponent({
@@ -33,15 +34,14 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const toNewsDetail = () => {
-      console.log(route.name);
-      if (route.name === "HospitalNews") {
-        router.push({
-          name: "HospitalNewsDetail",
-          params: {
-            id: props.news.id,
-          },
-        });
-      }
+      // if (route.name === "HospitalNews") {
+      //   router.push({
+      //     name: "HospitalNewsDetail",
+      //     params: {
+      //       id: props.news.id,
+      //     },
+      //   });
+      // }
       if (route.name === "HospitalNotice") {
         router.push({
           name: "HospitalNoticeDetail",
@@ -51,7 +51,10 @@ export default defineComponent({
         });
       }
     };
-    return { toNewsDetail };
+    const formatTime = (date: number) => {
+      return formatDate(new Date(date), "YYYY-mm-dd");
+    };
+    return { toNewsDetail, formatTime };
   },
 });
 </script>
@@ -74,6 +77,15 @@ export default defineComponent({
     }
     p {
       font-size: 16px;
+    }
+    .content-info {
+      width: 100%;
+      height: 104px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
     }
   }
   .info,

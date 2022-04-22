@@ -54,7 +54,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
       {
         path: "/doctor/info/:id",
         name: "DoctorInfo",
-        component: () => import("@/views/Doctor/Info/Index.vue"),
+        component: () => import("@/views/Doctor/Info/Doctor.vue"),
         meta: {
           roles: ["doctor"],
           title: "医生详情",
@@ -118,7 +118,19 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
             component: () => import("@/views/Admin/DoctorManage/Index.vue"),
             meta: {
               roles: ["admin"],
-              title: "账号信息",
+              title: "医生账号信息",
+              icon: "",
+              isHide: false,
+              permission: true,
+            },
+          },
+          {
+            path: "/admin/doctor/time",
+            name: "AdminDoctorTime",
+            component: () => import("@/views/Admin/DoctorManage/Time.vue"),
+            meta: {
+              roles: ["admin"],
+              title: "医生工作时间",
               icon: "",
               isHide: false,
               permission: true,
@@ -145,7 +157,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
             component: () => import("@/views/Admin/UserManage/Index.vue"),
             meta: {
               roles: ["admin"],
-              title: "账号信息",
+              title: "病人账号信息",
               icon: "",
               isHide: false,
               permission: true,
@@ -351,18 +363,18 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           permission: false,
         },
       },
-      {
-        path: "/user/registration",
-        name: "Registration",
-        component: () => import("@/views/User/Registration/Index.vue"),
-        meta: {
-          roles: ["user"],
-          title: "我要挂号",
-          icon: "",
-          isHide: false,
-          permission: false,
-        },
-      },
+      // {
+      //   path: "/user/registration",
+      //   name: "Registration",
+      //   component: () => import("@/views/User/Registration/Index.vue"),
+      //   meta: {
+      //     roles: ["user"],
+      //     title: "我要挂号",
+      //     icon: "",
+      //     isHide: false,
+      //     permission: false,
+      //   },
+      // },
       {
         path: "/doctor/search",
         name: "DoctorSearch",
@@ -376,7 +388,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/user/registration/:id",
+        path: "/user/registration",
         name: "UserRegistration",
         component: () => import("@/views/User/Info/UserRegistration.vue"),
         meta: {

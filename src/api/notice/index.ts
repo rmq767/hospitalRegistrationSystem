@@ -54,11 +54,10 @@ export default {
    * @param {object} params
    * @return {*}
    */
-  apiGetAnnouncementById(params: object) {
+  apiGetAnnouncementById(id: string) {
     return request({
-      url: "/announcement/getAnnouncementById",
+      url: `/announcement/getAnnouncementById/${id}`,
       method: "get",
-      params,
     });
   },
 };

@@ -50,4 +50,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.login-content {
+  opacity: 0.8;
+}
+</style>

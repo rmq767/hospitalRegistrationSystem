@@ -2,26 +2,28 @@
   <el-card>
     <el-descriptions :title="info.date" :column="3" border>
       <template #extra>
-        <el-button type="primary" @click="cancel">取消预约</el-button>
-        <el-button type="primary" @click="evaluation">评价</el-button>
+        <el-button type="primary" @click="cancel" v-if="info.cancelStatus === 0"
+          >取消预约</el-button
+        >
+        <el-button type="primary" @click="evaluation" v-if="info.sawStatus === 1">评价</el-button>
       </template>
       <el-descriptions-item label="我的姓名">{{
-        info.name
+        info.userName
       }}</el-descriptions-item>
       <el-descriptions-item label="我的电话">{{
-        info.phone
+        info.userPhone
       }}</el-descriptions-item>
       <el-descriptions-item label="我的身份证号">{{
-        info.id
+        info.userIdCard
       }}</el-descriptions-item>
-      <el-descriptions-item label="预约医生">{{
-        info.doctor
-      }}</el-descriptions-item>
+      <el-descriptions-item label="预约医生">
+        <el-tag size="small">{{ info.doctorName }}</el-tag>
+      </el-descriptions-item>
       <el-descriptions-item label="预约科室">
-        <el-tag size="small">{{ info.department }}</el-tag>
+        <el-tag size="small">{{ info.administrativeName }}</el-tag>
       </el-descriptions-item>
     </el-descriptions>
-    <Evaluation ref="evaluationEl"></Evaluation>
+    <Evaluation ref="evaluationEl" @submit="submitEvalution"></Evaluation>
   </el-card>
 </template>
 
@@ -31,6 +33,7 @@ import { ElMessageBox, ElMessage, ElDialog } from "element-plus";
 import { UserInterface } from "@/utils/interface/user";
 import { useRouter } from "vue-router";
 import Evaluation from "./Evaluation.vue";
+import api from "@/api";
 export default defineComponent({
   name: "UserRegistrationInfo",
   components: {
@@ -42,7 +45,8 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props) {
+  emits: ["cancel", "submitEvalution"],
+  setup(props, { emit }) {
     const router = useRouter();
     const state = reactive({
       evaluationEl: ElDialog,
@@ -57,10 +61,7 @@ export default defineComponent({
         type: "warning",
       })
         .then(() => {
-          ElMessage({
-            type: "success",
-            message: "取消成功！",
-          });
+          emit("cancel", props.info.id);
         })
         .catch(() => {});
     };
@@ -68,11 +69,12 @@ export default defineComponent({
      * @description 评价
      */
     const evaluation = () => {
-      // router.push({ name: "Evaluation", params: { id: props.info.id } });
-      console.log(state.evaluationEl);
       state.evaluationEl.open();
     };
-    return { ...toRefs(state), cancel, evaluation };
+    const submitEvalution = (form: any) => {
+      emit("submitEvalution", form);
+    };
+    return { ...toRefs(state), cancel, evaluation, submitEvalution };
   },
 });
 </script>

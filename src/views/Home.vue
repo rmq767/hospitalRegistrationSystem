@@ -9,7 +9,17 @@
           />
         </div>
         <div class="handle">
-          <span v-if="isLogin">{{ userName }}</span>
+          <el-dropdown trigger="click" v-if="name" @command="chooseMenu">
+            <span v-if="name">
+              {{ name
+              }}<el-icon class="el-icon--right"><elementArrowDown /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
           <el-button v-else type="text" @click="toLogin">登录</el-button>
         </div>
       </header>
@@ -29,10 +39,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import HomeNav from "@/components/HomeNav/Index.vue";
 import { Session } from "@/utils/session";
 import { useRoute, useRouter } from "vue-router";
+import store from "@/store";
 
 export default defineComponent({
   name: "UserHome",
@@ -40,24 +51,34 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const userName = ref("");
     const toLogin = () => {
       router.push("/login");
     };
     const notHomePage = computed(() => {
       return route.path !== "/";
     });
-    const isLogin = computed(() => {
-      const userInfo = Session.get("userInfo");
-      if (userInfo && userInfo.username) {
-        userName.value = userInfo.username;
-        return true;
-      } else {
-        return false;
-      }
+    const name = computed(() => {
+      return store.state.userInfos.username;
     });
+    /**
+     * @description 选择下拉菜单
+     */
+    const chooseMenu = (item: any) => {
+      switch (item) {
+        case "logout":
+          logOut();
+          break;
+      }
+    };
+    /**
+     * @description 退出登录
+     */
+    const logOut = () => {
+      Session.clear();
+      store.commit("clearUserInfos");
+    };
     onMounted(() => {});
-    return { toLogin, notHomePage, isLogin, userName };
+    return { toLogin, notHomePage, chooseMenu, name };
   },
 });
 </script>

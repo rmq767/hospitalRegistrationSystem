@@ -41,6 +41,9 @@ import { isPassword } from "@/utils/validate";
 import { Session } from "@/utils/session";
 import { ElForm } from "element-plus";
 import { useRoute, useRouter } from "vue-router";
+import api from "@/api";
+import { ElMessage } from "element-plus/lib/components";
+import store from "@/store";
 export default defineComponent({
   name: "ChangePassword",
   setup() {
@@ -96,15 +99,32 @@ export default defineComponent({
         { validator: validateAgianPassword, trigger: "blur" },
       ],
     });
-
+    /**
+     * @description 修改密码
+     */
     const onSubmit = (formEl: InstanceType<typeof ElForm> | undefined) => {
-      console.log(formEl);
       if (!formEl) return;
-      formEl.validate((valid) => {
+      formEl.validate(async (valid) => {
         if (valid) {
-          console.log("submit!");
+          const params = {
+            oldPassword: state.form.oldPassword,
+            newPassword: state.form.newPassword,
+            id: Session.get("userInfo").id,
+          };
+          try {
+            const response = await api.user.apiChangePwd(params);
+            if (response.data.code === 200) {
+              ElMessage.success("修改成功！");
+              formEl.resetFields();
+              Session.clear();
+              router.push({ name: "login" });
+            } else {
+              ElMessage.error(response.data.msg);
+            }
+          } catch (error: any) {
+            ElMessage.error(error);
+          }
         } else {
-          console.log("error submit!");
           return false;
         }
       });
@@ -114,23 +134,7 @@ export default defineComponent({
       formEl.resetFields();
     };
     const isLogin = computed(() => {
-      const userInfo = Session.get("userInfo");
-      const path = route.path;
-      if (
-        userInfo &&
-        (userInfo.roles === "doctor" || userInfo.roles === "admin") &&
-        path === "/changepassword"
-      ) {
-        return true;
-      } else if (
-        userInfo &&
-        userInfo.roles === "user" &&
-        path === "/user/changepassword"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+      return store.state.userInfos.roles === "user";
     });
     const toPage = () => {
       router.push("/login");

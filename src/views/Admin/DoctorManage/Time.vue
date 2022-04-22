@@ -19,6 +19,7 @@
       <el-button type="primary" @click="addTime">添加工作时间</el-button>
 
       <el-table :data="tableData" style="width: 100%">
+        <el-table-column prop="doctorName" label="医生" />
         <el-table-column prop="updateTime" label="日期">
           <template #default="scope">
             <span>{{ formatDateTime(scope.row.updateTime) }}</span>
@@ -38,11 +39,8 @@
               @click="handleDate(scope.row)"
               >调整时间</el-button
             >
-            <el-button
-              type="primary"
-              size="small"
-              @click="confirmDate(scope.row)"
-              >确认发布</el-button
+            <el-button type="danger" size="small" @click="deleteDate(scope.row)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -71,6 +69,7 @@ import { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus/lib/components";
 import {
   defineComponent,
+  getCurrentInstance,
   nextTick,
   onMounted,
   reactive,
@@ -79,7 +78,7 @@ import {
 } from "vue";
 import AddTimeForm from "./components/AddTimeForm.vue";
 export default defineComponent({
-  name: "WorkTimeToAdjust",
+  name: "DoctorTime",
   components: {
     AddTimeForm,
   },
@@ -94,12 +93,7 @@ export default defineComponent({
         pageSize: 10,
         total: 0,
       },
-      tableData: [
-        {
-          updateTime: "2022-04-18",
-          workTime: "上午",
-        },
-      ],
+      tableData: [],
       rowData: null,
       doctorId: Session.get("userInfo").id,
     });
@@ -181,12 +175,11 @@ export default defineComponent({
      */
     const getWorkTime = async () => {
       const params = {
-        doctorId: state.doctorId,
         ...state.pageInfo,
         ...state.filter,
       };
       try {
-        const response = await api.doctor.apiGetWorkTime(params);
+        const response = await api.doctor.apiGetAllWorkTime(params);
         if (response.data.code === 200) {
           state.tableData = response.data.data.records;
           state.pageInfo.total = response.data.data.total;
@@ -202,32 +195,22 @@ export default defineComponent({
      */
     const handleDate = (row: any) => {
       state.rowData = Object.assign({}, row);
-      nextTick(() => {
-        (addForm.value as any).open();
-      });
+      (addForm.value as any).open();
     };
     /**
      * @description 确认发布
      */
-    const confirmDate = async (row: any) => {
-      if (row.status !== 1) {
-        const params = {
-          id: row.id,
-          status: 1,
-        };
-        try {
-          const response = await api.doctor.apiEditWorkTime(params);
-          if (response.data.code === 200) {
-            ElMessage.success("发布成功!");
-            getWorkTime();
-          } else {
-            ElMessage.error(response.data.msg);
-          }
-        } catch (error: any) {
-          ElMessage.error(error);
+    const deleteDate = async (row: any) => {
+      try {
+        const response = await api.doctor.apiDeleteWorkTime(row.id);
+        if (response.data.code === 200) {
+          ElMessage.success("删除成功！");
+          getWorkTime();
+        } else {
+          ElMessage.error(response.data.msg);
         }
-      } else {
-        ElMessage.warning("已发布!");
+      } catch (error: any) {
+        ElMessage.error(error);
       }
     };
     const formatDateTime = (time: Date) => {
@@ -235,10 +218,12 @@ export default defineComponent({
     };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
+      getWorkTime();
     };
     const handleSizeChange = (pageSize: number) => {
       state.pageInfo.pageSize = pageSize;
       state.pageInfo.currentPage = 1;
+      getWorkTime();
     };
     onMounted(() => {
       getWorkTime();
@@ -246,7 +231,6 @@ export default defineComponent({
     return {
       ...toRefs(state),
       handleDate,
-      confirmDate,
       handleCurrentChange,
       handleSizeChange,
       addTime,
@@ -254,6 +238,7 @@ export default defineComponent({
       submitForm,
       filterData,
       formatDateTime,
+      deleteDate,
     };
   },
 });

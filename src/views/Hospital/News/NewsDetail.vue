@@ -9,7 +9,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import api from "@/api";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import { useRoute } from "vue-router";
 export default defineComponent({
   name: "HospitalNewsDetail",

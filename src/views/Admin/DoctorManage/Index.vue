@@ -11,11 +11,7 @@
           <el-input v-model="filterForm.username"></el-input>
         </el-form-item>
         <el-form-item label="科室：">
-          <el-select
-            v-model="filterForm.administrativeName"
-            clearable
-            filterable
-          >
+          <el-select v-model="filterForm.administrativeId" clearable filterable>
             <el-option
               v-for="item in departmentOptions"
               :key="item.id"
@@ -33,7 +29,7 @@
     </el-card>
     <el-card>
       <div class="mb20">
-        <el-button type="primary" @click="addDoctor">新增医生</el-button>
+        <el-button type="primary" @click="addDoctor">新增医务工作者</el-button>
       </div>
       <el-table :data="doctorTable">
         <el-table-column label="账号" prop="username"> </el-table-column>
@@ -52,8 +48,11 @@
           </template>
         </el-table-column>
         <el-table-column label="级别" prop="doctorRank"> </el-table-column>
-        <el-table-column label="科室" prop="administrativeName">
-        </el-table-column>
+        <el-table-column
+          label="科室"
+          prop="administrativeName"
+        ></el-table-column>
+
         <el-table-column label="毕业院校" prop="graduateInstitutions">
         </el-table-column>
         <el-table-column label="工作年限" prop="workTime"> </el-table-column>
@@ -114,7 +113,7 @@ export default defineComponent({
     const state = reactive({
       filterForm: {
         username: "",
-        administrativeName: "",
+        administrativeId: "",
       },
       departmentOptions: [],
       doctorTable: [],
@@ -123,7 +122,7 @@ export default defineComponent({
         pageSize: 10,
         total: 0,
       },
-      doctorInfo: null,
+      doctorInfo: {},
       doctorDialogEl: ElDialog,
     });
     /**
@@ -200,6 +199,8 @@ export default defineComponent({
     const onReset = (formEl: FormInstance | undefined) => {
       if (!formEl) return;
       formEl.resetFields();
+      state.filterForm.username = "";
+      state.filterForm.administrativeId = "";
       getDoctorList();
     };
     /**
@@ -213,14 +214,16 @@ export default defineComponent({
       }
     };
     const addDoctor = () => {
-      state.doctorInfo = null;
-      state.doctorDialogEl.open();
+      nextTick(() => {
+        state.doctorInfo = {};
+        state.doctorDialogEl.open();
+      });
     };
     const editDoctor = (row: any) => {
       nextTick(() => {
         state.doctorInfo = Object.assign({}, row);
+        state.doctorDialogEl.open();
       });
-      state.doctorDialogEl.open();
     };
     const handleCurrentChange = (page: number) => {
       state.pageInfo.currentPage = page;
